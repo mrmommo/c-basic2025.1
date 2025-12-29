@@ -1,4 +1,6 @@
 # no exe
 *.exe
-racthaicongnghiep/
+# no rac
+rac.c
+
 
