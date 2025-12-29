@@ -1,34 +1,92 @@
 
+======================================== ./racthai/rac.c ========================================
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 901
+
+typedef struct {
+    int a, b, steps;
+} State;
+
+int visited[MAX][MAX];
+
+int gcd(int x, int y) {
+    return y == 0 ? x : gcd(y, x % y);
+}
+
+int minSteps(int a, int b, int c) {
+    if (c > a && c > b)
+        return -1;
+    if (c % gcd(a, b) != 0)
+        return -1;
+
+    memset(visited, 0, sizeof(visited));
+    State queue[MAX * MAX];
+    int front = 0, rear = 0;
+
+    queue[rear++] = (State){0, 0, 0};
+
+    while (front < rear) {
+        State curr = queue[front++];
+        int x = curr.a, y = curr.b;
+
+        if (x == c || y == c)
+            return curr.steps;
+        if (visited[x][y])
+            continue;
+        visited[x][y] = 1;
+
+        queue[rear++] = (State){a, y, curr.steps + 1};
+        queue[rear++] = (State){x, b, curr.steps + 1};
+        queue[rear++] = (State){0, y, curr.steps + 1};
+        queue[rear++] = (State){x, 0, curr.steps + 1};
+        int pour = (x < b - y) ? x : (b - y);
+        queue[rear++] = (State){x - pour, y + pour, curr.steps + 1};
+        pour = (y < a - x) ? y : (a - x);
+        queue[rear++] = (State){x + pour, y - pour, curr.steps + 1};
+    }
+
+    return -1;
+}
+
+int main() {
+    int a, b, c;
+    scanf("%d %d %d", &a, &b, &c);
+    printf("%d\n", minSteps(a, b, c));
+    return 0;
+}
+
+
 ======================================== ./tuan1/b1(Text_Replacement).c ========================================
 
 #include <stdio.h>
 #include <string.h>
-char p1[50] , p2[50] , t[10001] , ketqua[1001];
-int main(){
-    fgets(p1,50,stdin);
-    p1[strcspn(p1,"\n")] = '\0';
-    fgets(p2,50,stdin);
-    p2[strcspn(p2,"\n")] = '\0';
-    fgets(t,1001,stdin);
-    t[strcspn(t,"\n")] = '\0';
-    int i = 0 , post = 0;
-    while(t[i]!='\0'){
-        if(strncmp(&t[i],p1, strlen(p1))==0){
-            strcpy(&ketqua[post],p2);
+char p1[50], p2[50], t[10001], ketqua[1001];
+int main() {
+    fgets(p1, 50, stdin);
+    p1[strcspn(p1, "\n")] = '\0';
+    fgets(p2, 50, stdin);
+    p2[strcspn(p2, "\n")] = '\0';
+    fgets(t, 1001, stdin);
+    t[strcspn(t, "\n")] = '\0';
+    int i = 0, post = 0;
+    while (t[i] != '\0') {
+        if (strncmp(&t[i], p1, strlen(p1)) == 0) {
+            strcpy(&ketqua[post], p2);
             post += strlen(p2);
-            i+= strlen(p1);
-        }
-        else{
+            i += strlen(p1);
+        } else {
             ketqua[post] = t[i];
             i++;
             post++;
         }
     }
-    for(int i =0 ; i <strlen(ketqua); i++) printf("%c",ketqua[i]);
+    for (int i = 0; i < strlen(ketqua); i++)
+        printf("%c", ketqua[i]);
     return 0;
-    
-
-
 }
 
 
@@ -36,76 +94,72 @@ int main(){
 
 #include <stdio.h>
 
-int main(){
+int main() {
     char ch;
-    int i =0 , inword =0 ;
-    while((ch=getchar())!= EOF){
-        if(ch==' '||ch=='\n'||ch=='\t') inword = 0;
-        else{
-            if(inword == 0){
+    int i = 0, inword = 0;
+    while ((ch = getchar()) != EOF) {
+        if (ch == ' ' || ch == '\n' || ch == '\t')
+            inword = 0;
+        else {
+            if (inword == 0) {
                 i++;
                 inword = 1;
             }
         }
-
     }
-    printf("%d",i);
+    printf("%d", i);
     return 0;
 }
 
 
 ======================================== ./tuan1/b3(Find_all_divisor_of_an_integer ).c ========================================
 
-#include <stdio.h>
 #include <math.h>
-int main(){
-    long long n ;
+#include <stdio.h>
+
+int main() {
+    long long n;
     scanf("%lld", &n);
-    int i , arr[10000];
-    int dem = 0 ;
-    for( i = 1 ; i <=sqrt(n); i++){
-        if(n % i == 0){
-            arr[dem] = i ;
+    int i, arr[10000];
+    int dem = 0;
+    for (i = 1; i <= sqrt(n); i++) {
+        if (n % i == 0) {
+            arr[dem] = i;
             dem++;
-            if(n/i != i){
-                arr[dem] = n / i ;
+            if (n / i != i) {
+                arr[dem] = n / i;
                 dem++;
             }
         }
-
     }
-    for( i =0 ; i < dem ; i++){
-        for(int j = i+1 ; j < dem ; j++ ){
-            if(arr[i] < arr[j]){
+    for (i = 0; i < dem; i++) {
+        for (int j = i + 1; j < dem; j++) {
+            if (arr[i] < arr[j]) {
                 int temp = arr[j];
                 arr[j] = arr[i];
                 arr[i] = temp;
-            } 
-
+            }
         }
     }
-    for(int i =0 ; i< dem ; i++) printf("%d ", -arr[i]);
-   for(int i = dem -1 ; i >= 0 ; i--) printf("%d ", arr[i]);
+    for (int i = 0; i < dem; i++)
+        printf("%d ", -arr[i]);
+    for (int i = dem - 1; i >= 0; i--)
+        printf("%d ", arr[i]);
     return 0;
-
-    
-
 }
 
 
 ======================================== ./tuan1/b4(Sum_Array).c ========================================
 
 #include <stdio.h>
-int main(){
-    int n ; 
+int main() {
+    int n;
     scanf("%d", &n);
-    int i, arr[n] ; 
+    int i, arr[n];
     int sum = 0;
-    for(i = 0 ; i < n ; i++){
-        scanf("%d",&arr[i]);
+    for (i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
         sum += arr[i];
-
-
     }
     printf("%d", sum);
     return 0;
@@ -117,7 +171,7 @@ int main(){
 #include <stdio.h>
 #include <string.h>
 
-int main(void){
+int main(void) {
     char arr[20];
     char a, b;
     int i;
@@ -142,70 +196,74 @@ int main(void){
 
 #include <stdio.h>
 int ma[1001][1001];
-int main(){
-    int n , m;
-    scanf("%d %d", &n , &m);
-    int i,j;
-    for( i= 0 ; i <n ; i++){
-        for(j =0 ; j< m ; j++){
+int main() {
+    int n, m;
+    scanf("%d %d", &n, &m);
+    int i, j;
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < m; j++) {
             scanf("%d", &ma[i][j]);
         }
     }
-    int dem = 0 ;
-    for( i =0 ; i <m ; i++){
-        for(j =0 ; j < n ; j++){
-            if(ma[j][i] != 1) break;
-            if(j == n -1) dem++;
-
+    int dem = 0;
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < n; j++) {
+            if (ma[j][i] != 1)
+                break;
+            if (j == n - 1)
+                dem++;
         }
     }
     printf("%d", dem);
     return 0;
-
 }
 
 
 ======================================== ./tuan2/b2(Check_Queen_solution).c ========================================
 
 #include <stdio.h>
-int Qcheck(int arr[][101], int NxN){
-    int  i , j ;
-    for(i =0 ; i< NxN  ; i++){
-        for(j = 0 ; j < NxN  ; j++){
-            if(arr[i][j]== 1){
-                int m ,n ;
-                for(m = i+1 , n = j-1 ; m < NxN && n >= 0 ; m++ , n--) if(arr[m][n] == 1) return 0;
-                for(m = i+1 , n = j+1 ; m < NxN && n < NxN ; m++ , n++) if(arr[m][n] == 1) return 0;
-                for(m = i+1 , n = j ; m < NxN ; m++) if(arr[m][n] == 1) return 0;
-                for(m = i , n = j+1 ; n < NxN ; n++) if(arr[m][n] == 1) return 0;
-
-
-            }
-
+int Qcheck(int arr[][101], int NxN) {
+    int i, j;
+    for (i = 0; i < NxN; i++) {
+        for (j = 0; j < NxN; j++) {
+            if (arr[i][j] == 1) {
+                int m, n;
+                for (m = i + 1, n = j - 1; m < NxN && n >= 0; m++, n--)
+                    if (arr[m][n] == 1)
+                        return 0;
+                for (m = i + 1, n = j + 1; m < NxN && n < NxN; m++, n++)
+                    if (arr[m][n] == 1)
+                        return 0;
+                for (m = i + 1, n = j; m < NxN; m++)
+                    if (arr[m][n] == 1)
+                        return 0;
+                for (m = i, n = j + 1; n < NxN; n++)
+                    if (arr[m][n] == 1)
+                        return 0;
             }
         }
-        return 1 ;
+    }
+    return 1;
 }
-
 
 int kq[100];
 int arr[101][101] = {0};
-int main(){
+int main() {
     int num;
     scanf("%d", &num);
-    int i , j , k ;
-    for( i =0 ; i < num ; i++){
+    int i, j, k;
+    for (i = 0; i < num; i++) {
         int NxN;
         scanf("%d", &NxN);
-        for(j = 0 ; j < NxN ; j++){
-            for(k =0 ; k< NxN ; k++){
+        for (j = 0; j < NxN; j++) {
+            for (k = 0; k < NxN; k++) {
                 scanf("%d", &arr[j][k]);
             }
         }
         kq[i] = Qcheck(arr, NxN);
-        
     }
-    for( i =0 ; i < num ; i++) printf("%d\n", kq[i]);
+    for (i = 0; i < num; i++)
+        printf("%d\n", kq[i]);
     return 0;
 }
 
@@ -213,133 +271,131 @@ int main(){
 ======================================== ./tuan2/b3(Evaluate_expression_contains_operand).c ========================================
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+
 #define MOD 1000000007
 char math[10001];
-long long num[10001] ={0};
-char op[5001] ;
-int main(){
-    fgets(math,10001,stdin);
-    math[strcspn(math,"\n")]='\0';
-    int length = strlen(math) ;
-    if(math[0] == '+' || math[0] == '*' || math[length-1] =='+' || math[length-1] == '*'){
+long long num[10001] = {0};
+char op[5001];
+int main() {
+    fgets(math, 10001, stdin);
+    math[strcspn(math, "\n")] = '\0';
+    int length = strlen(math);
+    if (math[0] == '+' || math[0] == '*' || math[length - 1] == '+' ||
+        math[length - 1] == '*') {
         printf("NOT_CORRECT");
         return 0;
     }
     int i;
-    for( i= 0 ; i< length ; i++){
-        if(math[i] == '*' || math[i] == '+'){
-            if(math[i+1] == '*' || math[i+1] =='+'){
+    for (i = 0; i < length; i++) {
+        if (math[i] == '*' || math[i] == '+') {
+            if (math[i + 1] == '*' || math[i + 1] == '+') {
                 printf("NOT_CORRECT");
                 return 0;
             }
         }
     }
     char *ptr = math;
-    int dem1 = 0 , dem2 = 0;
-    while( *ptr != '\0'){
-        num[dem1++] = strtoll(ptr,&ptr,10);
-        if(*ptr != '\0'){
+    int dem1 = 0, dem2 = 0;
+    while (*ptr != '\0') {
+        num[dem1++] = strtoll(ptr, &ptr, 10);
+        if (*ptr != '\0') {
             op[dem2++] = *ptr;
             ptr++;
         }
     }
-    for( i=0 ; i < dem2 ; i++){
-        if(op[i] == '*'){
-            num[i +1] = num[i] * num[i+1] % MOD;
-            num[i] = 0 ;
+    for (i = 0; i < dem2; i++) {
+        if (op[i] == '*') {
+            num[i + 1] = num[i] * num[i + 1] % MOD;
+            num[i] = 0;
         }
     }
-    long long sum = 0 ; 
-    for( i =0  ;i < dem1 ; i++){
+    long long sum = 0;
+    for (i = 0; i < dem1; i++) {
         sum = (sum + num[i]) % MOD;
     }
     printf("%lld", sum % MOD);
     return 0;
-
 }
-
 
 
 
 ======================================== ./tuan2/b4(Multiplication_of_2_matrices).c ========================================
 
 #include <stdio.h>
-int a[101][101] , b[101][101] , c[101][101] = {0};
-int main(){
-    int n , k ; 
-    scanf("%d %d", &n , &k);
-    int i , j ;
-    for(i =0 ; i <n ; i++){
-        for(j= 0 ; j< k ;j++){
+int a[101][101], b[101][101], c[101][101] = {0};
+int main() {
+    int n, k;
+    scanf("%d %d", &n, &k);
+    int i, j;
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < k; j++) {
             scanf("%d", &a[i][j]);
         }
     }
-    int k1 , m;
-    scanf("%d %d", &k1 , &m);
-    for(i =0 ; i <k ; i++){
-        for(j= 0 ; j< m ;j++){
+    int k1, m;
+    scanf("%d %d", &k1, &m);
+    for (i = 0; i < k; i++) {
+        for (j = 0; j < m; j++) {
             scanf("%d", &b[i][j]);
         }
     }
-    for(i =0 ; i <n ; i++){
-        for(j= 0 ; j< m ;j++){
-            for(int h =0 ; h < k ; h++ ){
-                c[i][j] += a[i][h]*b[h][j] ;
-
-
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < m; j++) {
+            for (int h = 0; h < k; h++) {
+                c[i][j] += a[i][h] * b[h][j];
             }
-
         }
     }
-    for(i =0 ; i <n ; i++){
-        for(j= 0 ; j< m ;j++){
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < m; j++) {
             printf("%d ", c[i][j]);
         }
         printf("\n");
     }
 
     return 0;
-
 }
 
 
 ======================================== ./tuan2/b5(Bounding_rectangle).c ========================================
 
 #include <stdio.h>
-int arr[1001][4] ;
-int main(){
+int arr[1001][4];
+int main() {
     int n;
     scanf("%d", &n);
-    int i ,j ;
-    for( int i =0 ; i <n ;i++){
-        for(j =0 ;j <4 ;j++){
-            scanf("%d",&arr[i][j]);
+    int i, j;
+    for (int i = 0; i < n; i++) {
+        for (j = 0; j < 4; j++) {
+            scanf("%d", &arr[i][j]);
         }
     }
-    int x1 , y1 ,x2 ,y2 ;
-    int temp1 =1001 , temp2 = 0 ;
-    for(i =0 ; i < n ; i++){
-        for(j =0 ; j <4 ; j+= 2){
-            if(arr[i][j] < temp1) temp1 =arr[i][j];
-            if(arr[i][j] > temp2) temp2 =arr[i][j];
+    int x1, y1, x2, y2;
+    int temp1 = 1001, temp2 = 0;
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < 4; j += 2) {
+            if (arr[i][j] < temp1)
+                temp1 = arr[i][j];
+            if (arr[i][j] > temp2)
+                temp2 = arr[i][j];
         }
     }
-    x1 = temp1 , x2 = temp2 ;
-    temp1 =1001 , temp2 = 0 ;
-    for(i =0 ; i < n ; i++){
-        for(j =1 ; j <4 ; j+= 2){
-            if(arr[i][j] < temp1) temp1 =arr[i][j];
-            if(arr[i][j] > temp2) temp2 =arr[i][j];
+    x1 = temp1, x2 = temp2;
+    temp1 = 1001, temp2 = 0;
+    for (i = 0; i < n; i++) {
+        for (j = 1; j < 4; j += 2) {
+            if (arr[i][j] < temp1)
+                temp1 = arr[i][j];
+            if (arr[i][j] > temp2)
+                temp2 = arr[i][j];
         }
     }
-    y1 = temp1 , y2 = temp2 ;
-    int sum = (x2-x1)*(y2-y1);
+    y1 = temp1, y2 = temp2;
+    int sum = (x2 - x1) * (y2 - y1);
     printf("%d", sum);
     return 0;
-
-
 }
 
 
@@ -347,34 +403,36 @@ int main(){
 
 #include <stdio.h>
 #include <string.h>
- typedef struct{
-    int yyyy , mm , dd;
-    int h , m , s;
+typedef struct {
+    int yyyy, mm, dd;
+    int h, m, s;
     char user_id[10];
     int q_id;
 
- }sv;
-int main(){
-    sv  a[1000];
-    int i =0 ;
+} sv;
+int main() {
+    sv a[1000];
+    int i = 0;
     char line[100];
-    while(1){
-        fgets(line,100,stdin);
-        line[strcspn(line,"\n")] = '\0';
-        if( line[0] == '*') break;
-        sscanf(line,"%d-%d-%d %d:%d:%d %s question%d ", &a[i].yyyy, &a[i].mm, &a[i].dd, &a[i].h, &a[i].m, &a[i].s, &a[i].user_id, &a[i].q_id);
+    while (1) {
+        fgets(line, 100, stdin);
+        line[strcspn(line, "\n")] = '\0';
+        if (line[0] == '*')
+            break;
+        sscanf(line, "%d-%d-%d %d:%d:%d %s question%d ", &a[i].yyyy, &a[i].mm,
+               &a[i].dd, &a[i].h, &a[i].m, &a[i].s, &a[i].user_id, &a[i].q_id);
         i++;
     }
     return 0;
-    
 }
 
 
 ======================================== ./tuan2/b7(Find_integer_solutions_to_Polynomial_Degree_3).c ========================================
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+
 
 #define MAX_ROOTS 3
 
@@ -415,10 +473,12 @@ int main() {
     for (int i = 1; i * (long long)i <= abs_c; ++i) {
         if (abs_c % i == 0) {
             divisors[dcount++] = i;
-            if (i != abs_c / i) divisors[dcount++] = abs_c / i;
+            if (i != abs_c / i)
+                divisors[dcount++] = abs_c / i;
         }
     }
-    for (int i = 0, orig = dcount; i < orig; ++i) divisors[dcount++] = -divisors[i];
+    for (int i = 0, orig = dcount; i < orig; ++i)
+        divisors[dcount++] = -divisors[i];
 
     for (int k = 0; k < MAX_ROOTS; ++k) {
         int root = 0, multiplicity = 0;
@@ -427,18 +487,24 @@ int main() {
             int x = divisors[i];
             // Skip already used roots
             int skip = 0;
-            for (int t = 0; t < nroots; ++t) if (roots[t] == x) skip = 1;
-            if (skip) continue;
-            long long val = (k == 0) ? ((long long)x * x * x + (long long)ca * x * x + (long long)cb * x + cc)
-                            : (k == 1) ? ((long long)x * x + (long long)ca * x + cb)
-                            : ((long long)x + ca);
+            for (int t = 0; t < nroots; ++t)
+                if (roots[t] == x)
+                    skip = 1;
+            if (skip)
+                continue;
+            long long val =
+                (k == 0)   ? ((long long)x * x * x + (long long)ca * x * x +
+                            (long long)cb * x + cc)
+                : (k == 1) ? ((long long)x * x + (long long)ca * x + cb)
+                           : ((long long)x + ca);
             if (val == 0) {
                 root = x;
                 found_root = 1;
                 break;
             }
         }
-        if (!found_root) break;
+        if (!found_root)
+            break;
         // Count multiplicity
         do {
             multiplicity++;
@@ -455,10 +521,15 @@ int main() {
             } else {
                 ca = 0;
             }
-            long long val = (k == 0) ? ((long long)root * root * root + (long long)ca * root * root + (long long)cb * root + cc)
-                            : (k == 1) ? ((long long)root * root + (long long)ca * root + cb)
-                            : ((long long)root + ca);
-            if (val != 0) break;
+            long long val =
+                (k == 0)
+                    ? ((long long)root * root * root +
+                       (long long)ca * root * root + (long long)cb * root + cc)
+                : (k == 1)
+                    ? ((long long)root * root + (long long)ca * root + cb)
+                    : ((long long)root + ca);
+            if (val != 0)
+                break;
         } while (multiplicity < 3);
         roots[nroots] = root;
         mult[nroots] = multiplicity;
@@ -466,9 +537,12 @@ int main() {
         found = 1;
     }
     int ok = 0;
-    if (nroots == 3 && ca == 0 && cb == 0 && cc == 0) ok = 1;
-    if (nroots == 2 && ca == 0 && cb == 0) ok = 1;
-    if (nroots == 1 && ca == 0) ok = 1;
+    if (nroots == 3 && ca == 0 && cb == 0 && cc == 0)
+        ok = 1;
+    if (nroots == 2 && ca == 0 && cb == 0)
+        ok = 1;
+    if (nroots == 1 && ca == 0)
+        ok = 1;
     if (!ok) {
         printf("NO SOLUTION\n");
         return 0;
@@ -476,8 +550,12 @@ int main() {
     for (int i = 0; i < nroots - 1; ++i)
         for (int j = i + 1; j < nroots; ++j)
             if (roots[i] > roots[j]) {
-                int t = roots[i]; roots[i] = roots[j]; roots[j] = t;
-                t = mult[i]; mult[i] = mult[j]; mult[j] = t;
+                int t = roots[i];
+                roots[i] = roots[j];
+                roots[j] = t;
+                t = mult[i];
+                mult[i] = mult[j];
+                mult[j] = t;
             }
     for (int i = 0; i < nroots; ++i)
         printf("%d %d\n", roots[i], mult[i]);
@@ -494,7 +572,8 @@ int check_row(int mat[9][9], int row) {
     int seen[10] = {0};
     for (int j = 0; j < 9; ++j) {
         int val = mat[row][j];
-        if (val < 1 || val > 9 || seen[val]) return 0;
+        if (val < 1 || val > 9 || seen[val])
+            return 0;
         seen[val] = 1;
     }
     return 1;
@@ -504,7 +583,8 @@ int check_col(int mat[9][9], int col) {
     int seen[10] = {0};
     for (int i = 0; i < 9; ++i) {
         int val = mat[i][col];
-        if (val < 1 || val > 9 || seen[val]) return 0;
+        if (val < 1 || val > 9 || seen[val])
+            return 0;
         seen[val] = 1;
     }
     return 1;
@@ -515,7 +595,8 @@ int check_square(int mat[9][9], int start_row, int start_col) {
     for (int i = 0; i < 3; ++i)
         for (int j = 0; j < 3; ++j) {
             int val = mat[start_row + i][start_col + j];
-            if (val < 1 || val > 9 || seen[val]) return 0;
+            if (val < 1 || val > 9 || seen[val])
+                return 0;
             seen[val] = 1;
         }
     return 1;
@@ -550,34 +631,36 @@ int main() {
 ======================================== ./tuan3/b1(Array_Equality).c ========================================
 
 #include <stdio.h>
-int arr1[1002] , arr2[1002] ;
-int main(){
-    int T ;
+int arr1[1002], arr2[1002];
+int main() {
+    int T;
     scanf("%d", &T);
     int arr3[1001] = {0};
-    int i , j;
+    int i, j;
     int dem = 0;
-    for( i = 0 ;i < T ; i++){
-        int n , m ;
-        scanf("%d %d", &n , &m);
-        for ( j =0 ; j < n ; j++) scanf("%d", &arr1[j]);
-        for ( j =0 ; j < m ; j++) scanf("%d", &arr2[j]);
-        if ( n != m){
-            arr3[i] = 0 ;
+    for (i = 0; i < T; i++) {
+        int n, m;
+        scanf("%d %d", &n, &m);
+        for (j = 0; j < n; j++)
+            scanf("%d", &arr1[j]);
+        for (j = 0; j < m; j++)
+            scanf("%d", &arr2[j]);
+        if (n != m) {
+            arr3[i] = 0;
             continue;
         }
-        for(j =0 ; j <n ; j++){
-            if(arr1[j] == arr2[j]) arr3[i] = 1;
-            else{
+        for (j = 0; j < n; j++) {
+            if (arr1[j] == arr2[j])
+                arr3[i] = 1;
+            else {
                 arr3[i] = 0;
                 break;
             }
-
+        }
     }
-    }
-    for( i = 0 ; i < T ; i++) printf("%d\n", arr3[i]);
+    for (i = 0; i < T; i++)
+        printf("%d\n", arr3[i]);
     return 0;
-
 }
 
 
@@ -588,33 +671,33 @@ int main(){
 
 ======================================== ./tuan3/b3(Solve_degree_2_polynomial_equation).c ========================================
 
-#include <stdio.h>
 #include <math.h>
-int main(){
-    double a ,b , c;
-    scanf("%lf %lf %lf", &a , &b , &c );
-    double delta = b*b -4*a*c;
-    if( a== 0){
-        if( b== c | c== 0){
-         printf("NO SOLUTION");
-        return 0;   
+#include <stdio.h>
+
+int main() {
+    double a, b, c;
+    scanf("%lf %lf %lf", &a, &b, &c);
+    double delta = b * b - 4 * a * c;
+    if (a == 0) {
+        if (b == c | c == 0) {
+            printf("NO SOLUTION");
+            return 0;
         }
-        printf("%.2lf", -c/b);
+        printf("%.2lf", -c / b);
         return 0;
     }
-    if( delta < 0){
+    if (delta < 0) {
         printf("NO SOLUTION");
         return 0;
     }
-    if(delta == 0){
-        printf("%.2lf", (-b)/(2*a));
+    if (delta == 0) {
+        printf("%.2lf", (-b) / (2 * a));
         return 0;
 
-    }
-    else printf("%.2lf %.2lf", (-b-sqrt(delta))/(2*a) , (-b+sqrt(delta))/(2*a)  ) ;
+    } else
+        printf("%.2lf %.2lf", (-b - sqrt(delta)) / (2 * a),
+               (-b + sqrt(delta)) / (2 * a));
     return 0;
-
-
 }
 
 
@@ -622,38 +705,40 @@ int main(){
 
 #include <stdio.h>
 int arr[100001];
-int main(){
-    int n , k;
-    scanf("%d %d", &n , &k);
-    int i , j ;
-    for(i =0 ; i< n ; i++) scanf("%d", &arr[i]);
-    int sum = 0 , dem = 0;
-    for( i = 0 ; i <= n - k ; i++){
-        for(j = 0 ; j < k ; j++){
-            sum += arr[i+j];
+int main() {
+    int n, k;
+    scanf("%d %d", &n, &k);
+    int i, j;
+    for (i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+    int sum = 0, dem = 0;
+    for (i = 0; i <= n - k; i++) {
+        for (j = 0; j < k; j++) {
+            sum += arr[i + j];
         }
-        if( sum % 2 == 0 ) dem++;
+        if (sum % 2 == 0)
+            dem++;
         sum = 0;
-
     }
     printf("%d", dem);
     return 0;
-
 }
 
 
 ======================================== ./tuan3/b5(Find_all_perfect_square_in_a_sequence).c ========================================
 
-#include <stdio.h>
 #include <math.h>
+#include <stdio.h>
+
 int arr[1000001];
-int main(){
+int main() {
     int n;
     scanf("%d", &n);
-    int i,  dem =0 ;
-    for( i =0 ; i< n ; i++){
+    int i, dem = 0;
+    for (i = 0; i < n; i++) {
         scanf("%d", &arr[i]);
-        if( sqrt(arr[i]) == (int)sqrt(arr[i]) ) dem++;
+        if (sqrt(arr[i]) == (int)sqrt(arr[i]))
+            dem++;
     }
     printf("%d", dem);
     return 0;
@@ -663,34 +748,36 @@ int main(){
 ======================================== ./tuan3/b6(Separate_the_integer_and_decimal_parts_of_a_float).c ========================================
 
 #include <stdio.h>
-int main(){
+int main() {
     double a;
     scanf("%lf", &a);
     int b = (int)a;
-    if(b >a) b -= 1;
-    double c = a - b ;
-    printf("%d %.2f", b ,c);
+    if (b > a)
+        b -= 1;
+    double c = a - b;
+    printf("%d %.2f", b, c);
     return 0;
 }
 
 
 ======================================== ./tuan3/b7(Convert_a_TEXT_to_Upper-Case).c ========================================
 
+#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
+
 #define MAX 1000000
-int main(){
+int main() {
     char arr[MAX];
-     while (fgets(arr, MAX, stdin)){
-    int i ;
-    int k = 'A' - 'a';
-    for( i=0 ; i < strlen(arr); i++){
-        if('a' <= arr[i] && arr[i] <= 'z') arr[i] += k;
-        
+    while (fgets(arr, MAX, stdin)) {
+        int i;
+        int k = 'A' - 'a';
+        for (i = 0; i < strlen(arr); i++) {
+            if ('a' <= arr[i] && arr[i] <= 'z')
+                arr[i] += k;
+        }
+        printf("%s", arr);
     }
-    printf("%s", arr);
-}
     return 0;
 }
 
@@ -710,42 +797,47 @@ int main() {
     }
 
     char ch;
-    while ((ch = getchar()) != '*' && ch != EOF);
+    while ((ch = getchar()) != '*' && ch != EOF)
+        ;
 
     char cmd[50];
     while (1) {
         scanf("%s", cmd);
-        if (strcmp(cmd, "***") == 0) break;
+        if (strcmp(cmd, "***") == 0)
+            break;
 
         if (strcmp(cmd, "find-max") == 0) {
             int max = a[0];
             for (int i = 1; i < n; i++)
-                if (a[i] > max) max = a[i];
+                if (a[i] > max)
+                    max = a[i];
             printf("%d\n", max);
-        } 
-        
+        }
+
         else if (strcmp(cmd, "find-min") == 0) {
             int min = a[0];
             for (int i = 1; i < n; i++)
-                if (a[i] < min) min = a[i];
+                if (a[i] < min)
+                    min = a[i];
             printf("%d\n", min);
-        } 
-        
+        }
+
         else if (strcmp(cmd, "sum") == 0) {
             int s = 0;
             for (int i = 0; i < n; i++)
                 s += a[i];
             printf("%d\n", s);
-        } 
-        
+        }
+
         else if (strcmp(cmd, "find-max-segment") == 0) {
             int i, j;
             scanf("%d %d", &i, &j);
-            i--; 
-            j--; 
+            i--;
+            j--;
             int max = a[i];
             for (int k = i + 1; k <= j; k++)
-                if (a[k] > max) max = a[k];
+                if (a[k] > max)
+                    max = a[k];
             printf("%d\n", max);
         }
     }
@@ -765,20 +857,23 @@ int main() {
 int ***Alloc_Cub(int m, int r, int c) {
     int i, j;
     int ***a = (int ***)malloc(m * sizeof(int **));
-    if (!a) return NULL;
+    if (!a)
+        return NULL;
 
     for (i = 0; i < m; i++) {
         a[i] = (int **)malloc(r * sizeof(int *));
-        if (!a[i]) return NULL;
+        if (!a[i])
+            return NULL;
         for (j = 0; j < r; j++) {
             a[i][j] = (int *)calloc(c, sizeof(int));
-            if (!a[i][j]) return NULL;
+            if (!a[i][j])
+                return NULL;
         }
     }
     return a;
 }
 
-//Hàm Free_Cub(...)
+// Hàm Free_Cub(...)
 void Free_Cub(int ***a, int m, int r) {
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < r; j++)
@@ -793,7 +888,8 @@ void Free_Cub(int ***a, int m, int r) {
 void Realloc_Cub(int ****p, int m, int r, int c, int m2, int r2, int c2) {
     int ***old = *p;
     int ***new = Alloc_Cub(m2, r2, c2);
-    if (!new) return;
+    if (!new)
+        return;
     int mm = (m < m2 ? m : m2);
     int rr = (r < r2 ? r : r2);
     int cc = (c < c2 ? c : c2);
@@ -809,7 +905,8 @@ void Realloc_Cub(int ****p, int m, int r, int c, int m2, int r2, int c2) {
 int main() {
     int m = 2, r = 3, c = 4;
     int ***a = Alloc_Cub(m, r, c);
-    if (!a) return 1;
+    if (!a)
+        return 1;
 
     // Gán giá trị mẫu
     for (int i = 0; i < m; i++)
@@ -853,17 +950,20 @@ int main() {
 
 #include <stdio.h>
 long long arr[1000][1000] = {0};
-long long Ckn(int k , int n){
-   if(k == 0 || k ==n) return 1;
-   else if(k == 1) return n;
-   if(arr[k][n] != 0) return arr[k][n] % 1000000007;
-    arr[k][n] = (Ckn(k-1,n-1)+Ckn(k,n-1)) % 1000000007;
+long long Ckn(int k, int n) {
+    if (k == 0 || k == n)
+        return 1;
+    else if (k == 1)
+        return n;
+    if (arr[k][n] != 0)
+        return arr[k][n] % 1000000007;
+    arr[k][n] = (Ckn(k - 1, n - 1) + Ckn(k, n - 1)) % 1000000007;
     return arr[k][n];
 }
-int main(){
-    int k ,n ; 
-    scanf("%d %d", &k , &n);
-    printf("%lld", Ckn(k,n));
+int main() {
+    int k, n;
+    scanf("%d %d", &k, &n);
+    printf("%lld", Ckn(k, n));
     return 0;
 }
 
@@ -871,34 +971,36 @@ int main(){
 ======================================== ./tuan4/b2(Subset_sum_of_elements_equal_to_B).c ========================================
 
 #include <stdio.h>
-int arr[101] = {0} ;
-int a ,b ; 
+int arr[101] = {0};
+int a, b;
 int dem = 0;
-int sum =0;
-int Try(int k){
-    for( int i =0 ; i<= 1 ; i++){
-        if( i== 1) sum+= arr[k];
-        if( sum > b){
+int sum = 0;
+int Try(int k) {
+    for (int i = 0; i <= 1; i++) {
+        if (i == 1)
+            sum += arr[k];
+        if (sum > b) {
             sum -= arr[k];
             continue;
         }
         if (k == a - 1) {
-            if (sum == b) dem++;
-            if (i == 1) sum -= arr[k]; 
+            if (sum == b)
+                dem++;
+            if (i == 1)
+                sum -= arr[k];
         }
 
-        else{
-            Try(k+1);
-            if( i == 1) sum -= arr[k];
+        else {
+            Try(k + 1);
+            if (i == 1)
+                sum -= arr[k];
         }
-
-
     }
-
 }
-int main(){
-    scanf("%d %d", &a , &b);
-    for( int i = 0 ; i < a ; i++) scanf("%d", &arr[i]);
+int main() {
+    scanf("%d %d", &a, &b);
+    for (int i = 0; i < a; i++)
+        scanf("%d", &arr[i]);
     Try(0);
     printf("%d", dem);
     return 0;
@@ -910,52 +1012,56 @@ int main(){
 
 #include <stdio.h>
 int arr[10][10];
-int dem =0 ;
-int Check(int m , int n){
-    for( int i =0 ; i < 9 ; i++){
-        if(arr[m][n] == arr[i][n]&& arr[m][n] != 0&& i!= m)
-        return 0;
-    }
-    for( int i =0 ; i < 9 ; i++){
-        if(arr[m][n] == arr[m][i]&& arr[m][n] != 0 && i != n)
-        return 0;
-    }
-    for(int i = m / 3 *3 ; i < m / 3 *3+3 ; i++){
-        for(int j = n /3 *3 ; j < n /3 *3+3 ; j++){
-            if(arr[m][n] == arr[i][j]&& arr[m][n] != 0 && (m!=i || n!= j))
+int dem = 0;
+int Check(int m, int n) {
+    for (int i = 0; i < 9; i++) {
+        if (arr[m][n] == arr[i][n] && arr[m][n] != 0 && i != m)
             return 0;
+    }
+    for (int i = 0; i < 9; i++) {
+        if (arr[m][n] == arr[m][i] && arr[m][n] != 0 && i != n)
+            return 0;
+    }
+    for (int i = m / 3 * 3; i < m / 3 * 3 + 3; i++) {
+        for (int j = n / 3 * 3; j < n / 3 * 3 + 3; j++) {
+            if (arr[m][n] == arr[i][j] && arr[m][n] != 0 && (m != i || n != j))
+                return 0;
         }
     }
     return 1;
 }
-void Try(int k1 , int k2){
-    if(arr[k1][k2] == 0){
-        for(int i = 1 ; i <= 9 ; i++){
-            arr[k1][k2] = i ;
-            if(Check(k1,k2)){
-             if(k1 == 8 && k2 == 8 ) dem++;
-             else if(k2 == 8) Try(k1+1, 0) ;
-             else if(k2 < 8) Try(k1,k2+1) ;
+void Try(int k1, int k2) {
+    if (arr[k1][k2] == 0) {
+        for (int i = 1; i <= 9; i++) {
+            arr[k1][k2] = i;
+            if (Check(k1, k2)) {
+                if (k1 == 8 && k2 == 8)
+                    dem++;
+                else if (k2 == 8)
+                    Try(k1 + 1, 0);
+                else if (k2 < 8)
+                    Try(k1, k2 + 1);
             }
-            arr[k1][k2] = 0 ;
+            arr[k1][k2] = 0;
+        }
+    } else if (arr[k1][k2] != 0) {
+        if (Check(k1, k2)) {
+            if (k1 == k2 && k1 == 8)
+                dem++;
+            else if (k2 == 8)
+                Try(k1 + 1, 0);
+            else if (k2 < 8)
+                Try(k1, k2 + 1);
         }
     }
-    else if(arr[k1][k2] != 0){
-        if(Check(k1,k2)){
-        if(k1 == k2 && k1 == 8 ) dem++;
-        else if(k2 == 8) Try(k1+1, 0) ;
-        else if(k2 < 8) Try(k1,k2+1) ;
-    }
-    
 }
-}
-int main(){
-    for( int i =0 ; i< 9 ;i++){
-        for(int j =0 ; j< 9; j++){
+int main() {
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
             scanf("%d", &arr[i][j]);
         }
     }
-    Try(0,0);
+    Try(0, 0);
     printf("%d", dem);
     return 0;
 }
@@ -966,35 +1072,36 @@ int main(){
 
 #include <stdio.h>
 int n;
-int arr[50]  = {0};
-void solution(){
+int arr[50] = {0};
+void solution() {
     int dem = 0;
-    for(int i =0 ; i < n ;i++)
-    printf("%d ", arr[i]);
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
     printf("\n");
     return;
 }
-int Check(){
-    for(int i = 1 ; i < n ; i++ ){
-        for(int j =0 ; j < i ; j++){
-            if(arr[i] == arr[j]) return 0;
+int Check() {
+    for (int i = 1; i < n; i++) {
+        for (int j = 0; j < i; j++) {
+            if (arr[i] == arr[j])
+                return 0;
         }
     }
     return 1;
-    
 }
-void Try(int k){
-    for(int i =1 ; i<= n ; i++){
-        arr[k] = i;  
-        if(k == n -1){
-            if (Check()){
-             solution();
-            }}
-        else Try(k+1);
+void Try(int k) {
+    for (int i = 1; i <= n; i++) {
+        arr[k] = i;
+        if (k == n - 1) {
+            if (Check()) {
+                solution();
+            }
+        } else
+            Try(k + 1);
     }
-}  
+}
 
-int main(){
+int main() {
     scanf("%d", &n);
     Try(0);
     return 0;
@@ -1004,20 +1111,19 @@ int main(){
 ======================================== ./tuan4/b5(Convert_integer_to_binary_string).c ========================================
 
 #include <stdio.h>
-int n ;
-void Binary( int n){
-    if(n == 0 ){
+int n;
+void Binary(int n) {
+    if (n == 0) {
         printf("0");
-    }
-    else if(n == 1 ){
+    } else if (n == 1) {
         printf("1");
+    } else {
+        Binary(n / 2);
+        printf("%d", n % 2);
     }
-    else{ Binary(n/2);
-    printf("%d", n%2);}
-    
 }
 
-int main(){
+int main() {
     scanf("%d", &n);
     Binary(n);
     return 0;
@@ -1028,20 +1134,24 @@ int main(){
 
 #include <stdio.h>
 int n;
-int arr[21] ={0};
-void solution(){
-    for( int i =0 ; i< n ;i++) printf("%d", arr[i]);
+int arr[21] = {0};
+void solution() {
+    for (int i = 0; i < n; i++)
+        printf("%d", arr[i]);
     printf("\n");
 }
-void Try(int k){
-    for( int i =0 ; i <= 1 ; i++){
+void Try(int k) {
+    for (int i = 0; i <= 1; i++) {
         arr[k] = i;
-        if(arr[k] == 1 && arr[k-1] ==1 ) continue;
-        if( k == n - 1) solution();
-        else Try(k+1);
+        if (arr[k] == 1 && arr[k - 1] == 1)
+            continue;
+        if (k == n - 1)
+            solution();
+        else
+            Try(k + 1);
     }
 }
-int main(){
+int main() {
     scanf("%d", &n);
     Try(0);
     return 0;
@@ -1051,32 +1161,31 @@ int main(){
 ======================================== ./tuan4/b7(Linear_Integer_Equation_coefficent_1).c ========================================
 
 #include <stdio.h>
-int n , m ;
+int n, m;
 int arr[11];
 int sum = 0;
-void solution(){
-    for(int i=0 ;i <n ; i++)
-    printf("%d ",arr[i]);
+void solution() {
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
     printf("\n");
 }
-void Try( int k){
-    for(int i = 1 ; i <= m -n + 1 ;i++){
+void Try(int k) {
+    for (int i = 1; i <= m - n + 1; i++) {
         arr[k] = i;
         sum += i;
-        if(k == n -1 ){
-            if(sum == m) solution();
-        }
-        else if(sum >= m){
+        if (k == n - 1) {
+            if (sum == m)
+                solution();
+        } else if (sum >= m) {
             sum -= i;
             continue;
-        }
-        else Try(k+1);
-        sum -=i;
-
+        } else
+            Try(k + 1);
+        sum -= i;
     }
 }
-int main(){
-    scanf("%d %d", &n ,&m);
+int main() {
+    scanf("%d %d", &n, &m);
     Try(0);
     return 0;
 }
@@ -1084,24 +1193,29 @@ int main(){
 
 ======================================== ./tuan4/b8(Count_number_of_Queen_solutions_with_some_specified_queens).c ========================================
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+
 int arr[13][13] = {0};
 int n;
 int dem = 0;
-int Check(int r, int c){
-    for( int i =0 ; i < n ; i++){
-        if(i!= c && arr[r][i] == 1) return 0;
+int Check(int r, int c) {
+    for (int i = 0; i < n; i++) {
+        if (i != c && arr[r][i] == 1)
+            return 0;
     }
-    for(int i =0 ; i < n ; i++ ){
-        if(i!= r && arr[i][c] == 1) return 0;
+    for (int i = 0; i < n; i++) {
+        if (i != r && arr[i][c] == 1)
+            return 0;
     }
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < n; j++){
-            if(arr[i][j] == 1){
-                if(i == r && j == c) continue;
-                if(abs(i - r) == abs(j - c)) return 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (arr[i][j] == 1) {
+                if (i == r && j == c)
+                    continue;
+                if (abs(i - r) == abs(j - c))
+                    return 0;
             }
         }
     }
@@ -1109,40 +1223,44 @@ int Check(int r, int c){
     return 1;
 }
 
-void TryRow(int r){
-    if(r == n){
+void TryRow(int r) {
+    if (r == n) {
         dem++;
         return;
     }
 
     int preset_col = -1;
-    for(int j = 0; j < n; ++j){
-        if(arr[r][j] == 1){ preset_col = j; break; }
+    for (int j = 0; j < n; ++j) {
+        if (arr[r][j] == 1) {
+            preset_col = j;
+            break;
+        }
     }
-    if(preset_col != -1){
-        if(Check(r, preset_col)) TryRow(r+1);
+    if (preset_col != -1) {
+        if (Check(r, preset_col))
+            TryRow(r + 1);
         return;
     }
-    for(int j = 0; j < n; ++j){
-        if(Check(r, j)){
+    for (int j = 0; j < n; ++j) {
+        if (Check(r, j)) {
             arr[r][j] = 1;
-            TryRow(r+1);
+            TryRow(r + 1);
             arr[r][j] = 0;
         }
     }
 }
-int main(){
+int main() {
     scanf("%d", &n);
-    for( int i =0 ; i <n ; i++){
-        for(int j = 0 ; j < n ; j++ ){
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
             scanf("%d", &arr[i][j]);
         }
     }
 
-    for(int i = 0; i < n; ++i){
-        for(int j = 0; j < n; ++j){
-            if(arr[i][j] == 1){
-                if(!Check(i,j)){
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (arr[i][j] == 1) {
+                if (!Check(i, j)) {
                     printf("0");
                     return 0;
                 }
@@ -1153,7 +1271,6 @@ int main(){
     TryRow(0);
     printf("%d", dem);
     return 0;
-
 }
 
 
@@ -1161,91 +1278,95 @@ int main(){
 ======================================== ./tuan5/b1(Hanoi_Tower).c ========================================
 
 #include <stdio.h>
-int n , A , B , C , D ;
+int n, A, B, C, D;
 int dem = 0;
-int Hanoi(int n , int A, int B, int C, int D ){
+int Hanoi(int n, int A, int B, int C, int D) {
     dem++;
-    if(n==1){
-        if(D!= 0 ) printf("%d %d\n", A, B);
+    if (n == 1) {
+        if (D != 0)
+            printf("%d %d\n", A, B);
         return dem;
     }
-    Hanoi(n-1,A,C,B,D);
-    if(D!=0) printf("%d %d\n", A,B);
-    Hanoi(n-1,C,B,A,D);
+    Hanoi(n - 1, A, C, B, D);
+    if (D != 0)
+        printf("%d %d\n", A, B);
+    Hanoi(n - 1, C, B, A, D);
 }
 
-int main(){
-    scanf("%d %d %d %d", &n ,&A, &B, &C);
-    Hanoi(n,A,B,C,0);
-    printf("%d\n",dem);
+int main() {
+    scanf("%d %d %d %d", &n, &A, &B, &C);
+    Hanoi(n, A, B, C, 0);
+    printf("%d\n", dem);
     dem = 0;
-    Hanoi(n,A,B,C,1);
+    Hanoi(n, A, B, C, 1);
     return 0;
 }
 
 
 ======================================== ./tuan5/b2(Count_Solutions_TSP).c ========================================
 
-#include <stdio.h>
 #include <limits.h>
+#include <stdio.h>
+
 int n, maxdis;
 int arr[101][101];
-int dis = 0 ;
+int dis = 0;
 int dem = 0;
-int C[101]; //tp di qua 
+int C[101]; // tp di qua
 int visited[101] = {0};
-void Try( int i){
-    for( int j =1 ; j < n ; j++){
-        if( visited[j] == 0){
+void Try(int i) {
+    for (int j = 1; j < n; j++) {
+        if (visited[j] == 0) {
             visited[j] = 1;
-            C[i] =j ;
-            dis += arr[C[i-1]][C[i]];
-            if( i < n - 1 ) Try(i+1);
-            else if(i == n -1){
-                if(maxdis - dis - arr[C[n-1]][C[0]] >= 0) dem++;
+            C[i] = j;
+            dis += arr[C[i - 1]][C[i]];
+            if (i < n - 1)
+                Try(i + 1);
+            else if (i == n - 1) {
+                if (maxdis - dis - arr[C[n - 1]][C[0]] >= 0)
+                    dem++;
             }
-        }
-        else continue;
-        visited[j] = 0 ; 
-        dis -= arr[C[i-1]][C[i]];
-
-
+        } else
+            continue;
+        visited[j] = 0;
+        dis -= arr[C[i - 1]][C[i]];
     }
 }
-int main(){
+int main() {
     scanf("%d %d", &n, &maxdis);
-    for( int i =0 ; i < n ; i++ ){
-        for( int j =0 ; j < n ;j++){
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
             scanf("%d", &arr[i][j]);
         }
     }
     visited[0] = 1;
     Try(1);
     printf("%d", dem);
- return 0;
+    return 0;
 }
 
 
 ======================================== ./tuan5/b3(Binary_sequence_generation).c ========================================
 
 #include <stdio.h>
-int n ; 
+int n;
 int arr[21];
-void solution(){
-    for( int i = 0 ; i < n ; i++){
+void solution() {
+    for (int i = 0; i < n; i++) {
         printf("%d", arr[i]);
     }
     printf("\n");
 }
-void Try( int k){
-    for( int i =0 ; i <=1 ; i++){
-        arr[k] = i ;
-        if (k < n -1 ) Try( k +1);
-        else if( k == n -1 ) solution();
-
+void Try(int k) {
+    for (int i = 0; i <= 1; i++) {
+        arr[k] = i;
+        if (k < n - 1)
+            Try(k + 1);
+        else if (k == n - 1)
+            solution();
     }
 }
-int main(){
+int main() {
     scanf("%d", &n);
     Try(0);
     return 0;
@@ -1255,26 +1376,28 @@ int main(){
 ======================================== ./tuan5/b4(Fibonacci).c ========================================
 
 #include <stdio.h>
-int n, arr[100002]= {0};
-long long Fun(int n){
-    if(n < 0) return 0;
-    if(n==0) return 0;
-    else if(n==1) return 1;
-    else if(n>=2){
-       if (arr[n] !=0) return arr[n];
-        else{
-        arr[n]=(Fun(n-1)+Fun(n-2))%1000000007;
+int n, arr[100002] = {0};
+long long Fun(int n) {
+    if (n < 0)
+        return 0;
+    if (n == 0)
+        return 0;
+    else if (n == 1)
+        return 1;
+    else if (n >= 2) {
+        if (arr[n] != 0)
+            return arr[n];
+        else {
+            arr[n] = (Fun(n - 1) + Fun(n - 2)) % 1000000007;
             return arr[n];
         }
     }
     return 0;
 }
-int main()
-{
-    scanf("%d",&n);
-    printf("%lld",Fun(n));
+int main() {
+    scanf("%d", &n);
+    printf("%lld", Fun(n));
     return 0;
-
 }
 
 
@@ -1282,59 +1405,61 @@ int main()
 ======================================== ./tuan5/b5(Greatest_Common_Divisor).c ========================================
 
 #include <stdio.h>
-int GCD( int a , int b){
-    if(a%b == 0) return b;
-    a = a % b ;
-    return GCD(b,a);
+int GCD(int a, int b) {
+    if (a % b == 0)
+        return b;
+    a = a % b;
+    return GCD(b, a);
 }
-int main(){
-    int a , b; 
-    scanf("%d %d", &a , &b);
-    printf("%d", GCD(a,b));
+int main() {
+    int a, b;
+    scanf("%d %d", &a, &b);
+    printf("%d", GCD(a, b));
     return 0;
 }
 
 
 ======================================== ./tuan5/b6(TSP).c ========================================
 
-#include <stdio.h>
 #include <limits.h>
+#include <stdio.h>
+
 int mindis = INT_MAX;
-int n, dis = 0 ;
+int n, dis = 0;
 int arrdis[105][105];
 int last[105];
 int visited[105] = {0};
-void Try( int i){
-    for( int j = 1 ; j < n ; j++){
-        if(visited[j] == 0 ){
-            visited[j] = 1 ;
-            last[i] = j ;
-            dis += arrdis[last[i-1]][last[i]];
-            if( dis > mindis){
+void Try(int i) {
+    for (int j = 1; j < n; j++) {
+        if (visited[j] == 0) {
+            visited[j] = 1;
+            last[i] = j;
+            dis += arrdis[last[i - 1]][last[i]];
+            if (dis > mindis) {
                 visited[j] = 0;
-                dis -= arrdis[last[i -1 ]][last[i]];
+                dis -= arrdis[last[i - 1]][last[i]];
                 continue;
             }
-            if( i < n -1 ) Try(i+1);
-            else if(i == n-1){
-                if( mindis > dis + arrdis[last[n-1]][last[0]])
-                mindis = dis + arrdis[last[n-1]][last[0]];
+            if (i < n - 1)
+                Try(i + 1);
+            else if (i == n - 1) {
+                if (mindis > dis + arrdis[last[n - 1]][last[0]])
+                    mindis = dis + arrdis[last[n - 1]][last[0]];
             }
-        }
-        else continue;
+        } else
+            continue;
         visited[j] = 0;
-        dis -= arrdis[last[i -1 ]][last[i]];
+        dis -= arrdis[last[i - 1]][last[i]];
     }
-
 }
-int main(){
+int main() {
     scanf("%d", &n);
-    for( int i = 0 ; i <n ; i++){
-        for( int j =0 ; j< n ; j++){
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
             scanf("%d", &arrdis[i][j]);
         }
     }
-    visited[0] = 1 ;
+    visited[0] = 1;
     Try(1);
     printf("%d", mindis);
     return 0;
@@ -1343,16 +1468,151 @@ int main(){
 
 ======================================== ./tuan6/b1(WATER_JUGS).c ========================================
 
+#include <stdio.h>
+// queue
+int class[901][901] = {0};
+int queue1[901];
+int queue2[901];
+int top = 0;
+void push(int u, int v) {
+    if (top < max) {
+        queue1[top++] = u;
+        queue2[top++] = v;
+    }
+}
+void pop() {
+    if (top > 0) {
+        for (int i = 0; i < top; i++) {
+            queue1[i] = queue1[i + 1];
+            queue2[i] = queue2[i + 1];
+        }
+        top--;
+    }
+}
+// gcd
+int gcd(int a, int b) {
+    if (b == 0)
+        return a;
+    return gcd(b, a % b);
+}
+int max(int a, int b) {
+    return a > b ? a : b;
+}
+// check
+int Check(int a, int b, int c) {
+    if (c <= max(a, b) && c % gcd(a, b) == 0)
+        return 1;
+    else
+        return 0;
+}
+// wtj
+int waterjugs(int a, int b, int c) {
+    if (!Check(a, b, c))
+        return 0;
+    else {
+        int b1 = 0, b2 = 0;
+        while (1) {
+            pop();
+        }
+    }
+}
 
+int main() {
+    queue1[0] = 0, queue2[0] = 0;
+    int a, b, c;
+    scanf("%d %d %d", &a, &b, &c);
+    printf("%d\n", waterjugs(a, b, c));
+    return 0;
+}
 
 
 ======================================== ./tuan6/b2(Simulation_Stack).c ========================================
 
+// push
+// pop
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
+#define Max 100
+//
+int stack[Max];
+int top = 0;
+void push(int v) {
+    if (top < Max) {
+        stack[top++] = v;
+    }
+}
+void pop() {
+    if (top > 0) {
+        printf("%d\n", stack[--top]);
+    } else
+        printf("NULL\n");
+}
+int main() {
+    char line[100];
+    while (fgets(line, sizeof(line), stdin)) {
+        if (line[0] == '#')
+            break;
+        if (!strncmp(line, "PUSH", 4)) {
+            int v;
+            sscanf(line + 5, "%d", &v);
+            push(v);
+        } else if (!strncmp(line, "POP", 3)) {
+            pop();
+        }
+    }
+    return 0;
+}
 
 
 ======================================== ./tuan6/b3(Simulation_Queue).c ========================================
 
+// Perform a sequence of operations over a queue, each element is an integer:
+// PUSH v: push a value v into the queue
+// POP: remove an element out of the queue and print this element to stdout
+// (print NULL if the queue is empty) Input Each line contains a command
+// (operration) of type PUSH  v POP Output Write the results of POP operations
+// (each result is written in a line)
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+//
+#define max 100
+int queue[max] = {0};
+int top = 0;
+
+void push(int v) {
+    if (top < max) {
+        queue[top++] = v;
+    }
+}
+void pop() {
+    if (top > 0) {
+        printf("%d\n", queue[0]);
+        for (int i = 0; i < top; i++) {
+            queue[i] = queue[i + 1];
+        }
+        top--;
+    } else
+        printf("NULL\n");
+}
+int main() {
+    char line[100];
+    while (fgets(line, sizeof(line), stdin)) {
+        if (line[0] == '#')
+            break;
+        if (!strncmp(line, "PUSH", 4)) {
+            int v;
+            sscanf(line + 5, "%d", &v);
+            push(v);
+        } else if (!strncmp(line, "POP", 3)) {
+            pop();
+        }
+    }
+    return 0;
+}
 
 
 
@@ -1373,65 +1633,191 @@ int main(){
 
 ======================================== ./tuan6/b7(Linked_List_Manipulation).c ========================================
 
+#include <ctype.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
-typedef struct Node{
+//
+#define max 100
+typedef struct Node {
     int key;
-    struct Node* next;
-}node;
-
-node* head = NULL;
-// ktra num co trong list chua
-int Check( int num){
-    node* p = head;
-    while(p != NULL){
-        if(p->key == num) return(1);
-        p = p -> next;
+    struct Node *next;
+} node;
+node *head = NULL;
+//
+int Check(int k) {
+    node *p = head;
+    while (p) {
+        if (p->key == k)
+            return 1;
+        p = p->next;
     }
     return 0;
 }
-// them vao cuoi danh sach
-void addlast( int num){
-    if(Check(num)) return;
-    node* newnode = (node*)malloc(sizeof(node));
-    newnode -> key = num;
-    newnode -> next = NULL;
-    if(!head){
+//
+void addlast(int k) {
+    if (Check(k) != 0)
+        return;
+    else {
+        node *newnode = (node *)malloc(sizeof(node));
+        newnode->key = k;
+        newnode->next = NULL;
+        node *p = head;
+        if (head == NULL) {
+            head = newnode;
+            return;
+        } else {
+            while (p->next)
+                p = p->next;
+            p->next = newnode;
+        }
+    }
+}
+//
+void addfirst(int k) {
+    if (Check(k) != 0)
+        return;
+    node *newnode = (node *)malloc(sizeof(node));
+    newnode->key = k;
+    newnode->next = NULL;
+    if (head == NULL) {
         head = newnode;
         return;
     }
-    node* p = head;
-    while(p -> next) p = p-> next;
-    p-> next = newnode;
-}
-//thêm vào đầu danh sách 
-void addfirst( int num){
-    if(Check(num)) return; 
-    node* newnode = (node*)malloc(sizeof(node));
-    newnode -> key = num;
-    newnode -> next = head;
+    node *p = head;
     head = newnode;
+    head->next = p;
 }
-//thêm u  sau v
-void addafter( int u , int v){
-    if(Check(u)) return;
-    node* p = head;
-    while(p &&  p-> key != v)p = p -> next;
-    if( !p ) return;
-    node* newnode = (node*)malloc(sizeof(node));
-    newnode -> key = u;
-    newnode -> next = p -> next;
-    p-> next = newnode ;
+//
+void addafter(int u, int v) {
+    if (Check(u) != 0)
+        return;
+    node *p = head;
+    while (p != NULL) {
+        if (p->key == v) {
+            node *newnode = (node *)malloc(sizeof(node));
+            newnode->key = u;
+            newnode->next = p->next;
+            p->next = newnode;
+            return;
+        }
+        p = p->next;
+    }
+}
+//
+void addbefore(int u, int v) {
+    if (Check(u) != 0)
+        return;
+    node *p = head;
+    node *before = head;
+    while (p != NULL) {
+        if (head->key == v) {
+            node *newnode = (node *)malloc(sizeof(node));
+            newnode->key = u;
+            newnode->next = head;
+            head = newnode;
+            return;
+        } else if (p->key == v) {
+            node *newnode = (node *)malloc(sizeof(node));
+            newnode->key = u;
+            newnode->next = p;
+            before->next = newnode;
+            return;
+        }
+        if (p != head)
+            before = before->next;
+        p = p->next;
+    }
+}
+// remove k
+void removeKey(int k) {
+    // ko có node
+    if (!head)
+        return;
+    if (head->key == k) {
+        node *tmp;
+        tmp = head;
+        head = head->next;
+        free(tmp);
+        return;
+    }
+    node *cur = head;
+    node *prev = NULL;
+    while (cur && cur->key != k) {
+        prev = cur;
+        cur = cur->next;
+    }
+    if (!cur)
+        return;
+    prev->next = cur->next;
+    free(cur);
+    return;
+}
+// reverse
+void reverse() {
+    node *prev = NULL;
+    node *cur = head;
+    while (cur) {
+        node *tmp = cur->next;
+        cur->next = prev;
+        prev = cur;
+        cur = tmp;
+    }
+    head = prev;
+    return;
+}
+// printflist
+void printfList() {
+    node *p = head;
+    while (p) {
+        printf("%d", p->key);
+        if (p->next)
+            printf(" ");
+        p = p->next;
+    }
+    printf("\n");
+    return;
 }
 
-
-
-
-
-
-
+int main() {
+    int n, k;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &k);
+        addlast(k);
+    }
+    char line[100];
+    while (fgets(line, max, stdin)) {
+        if (line[0] == '#')
+            break;
+        if (!strncmp(line, "addlast", 7)) {
+            int v;
+            sscanf(line + 8, "%d", &v);
+            addlast(v);
+        } else if (!strncmp(line, "addfirst", 8)) {
+            int v;
+            sscanf(line + 9, "%d", &v);
+            addfirst(v);
+        } else if (!strncmp(line, "addafter", 8)) {
+            int u, v;
+            sscanf(line + 9, "%d %d", &u, &v);
+            addafter(u, v);
+        } else if (!strncmp(line, "addbefore", 9)) {
+            int u, v;
+            sscanf(line + 10, "%d %d", &u, &v);
+            addbefore(u, v);
+        } else if (!strncmp(line, "remove", 6)) {
+            int v;
+            sscanf(line + 7, "%d", &v);
+            removeKey(v);
+        } else if (!strncmp(line, "reverse", 7)) {
+            reverse();
+        }
+    }
+    printfList();
+    return 0;
+}
 
 
 ======================================== ./tuan6/b8(Delete_number).c ========================================
@@ -1450,34 +1836,40 @@ typedef struct Node {
     struct Node *left, *right;
 } Node;
 
-Node* root = NULL;
-Node* find(Node* r, int id) {
-    if (r == NULL) return NULL;
-    if (r->id == id) return r;
-    Node* left = find(r->left, id);
-    if (left) return left;
+Node *root = NULL;
+Node *find(Node *r, int id) {
+    if (r == NULL)
+        return NULL;
+    if (r->id == id)
+        return r;
+    Node *left = find(r->left, id);
+    if (left)
+        return left;
     return find(r->right, id);
 }
-Node* newNode(int id) {
-    Node* p = (Node*)malloc(sizeof(Node));
+Node *newNode(int id) {
+    Node *p = (Node *)malloc(sizeof(Node));
     p->id = id;
     p->left = p->right = NULL;
     return p;
 }
-void preOrder(Node* r) {
-    if (r == NULL) return;
+void preOrder(Node *r) {
+    if (r == NULL)
+        return;
     printf("%d ", r->id);
     preOrder(r->left);
     preOrder(r->right);
 }
-void inOrder(Node* r) {
-    if (r == NULL) return;
+void inOrder(Node *r) {
+    if (r == NULL)
+        return;
     inOrder(r->left);
     printf("%d ", r->id);
     inOrder(r->right);
 }
-void postOrder(Node* r) {
-    if (r == NULL) return;
+void postOrder(Node *r) {
+    if (r == NULL)
+        return;
     postOrder(r->left);
     postOrder(r->right);
     printf("%d ", r->id);
@@ -1489,37 +1881,39 @@ int main() {
 
     while (1) {
         scanf("%s", cmd);
-        if (cmd[0] == '*') break;
+        if (cmd[0] == '*')
+            break;
 
         if (strcmp(cmd, "MakeRoot") == 0) {
             scanf("%d", &u);
             root = newNode(u);
-        }
-        else if (strcmp(cmd, "AddLeft") == 0) {
+        } else if (strcmp(cmd, "AddLeft") == 0) {
             scanf("%d %d", &u, &v);
-            if (find(root, u) != NULL) continue;    
-            Node* parent = find(root, v);
-            if (parent == NULL) continue;            
-            if (parent->left != NULL) continue;  
+            if (find(root, u) != NULL)
+                continue;
+            Node *parent = find(root, v);
+            if (parent == NULL)
+                continue;
+            if (parent->left != NULL)
+                continue;
             parent->left = newNode(u);
-        }
-        else if (strcmp(cmd, "AddRight") == 0) {
+        } else if (strcmp(cmd, "AddRight") == 0) {
             scanf("%d %d", &u, &v);
-            if (find(root, u) != NULL) continue;
-            Node* parent = find(root, v);
-            if (parent == NULL) continue;
-            if (parent->right != NULL) continue;
+            if (find(root, u) != NULL)
+                continue;
+            Node *parent = find(root, v);
+            if (parent == NULL)
+                continue;
+            if (parent->right != NULL)
+                continue;
             parent->right = newNode(u);
-        }
-        else if (strcmp(cmd, "PreOrder") == 0) {
+        } else if (strcmp(cmd, "PreOrder") == 0) {
             preOrder(root);
             printf("\n");
-        }
-        else if (strcmp(cmd, "InOrder") == 0) {
+        } else if (strcmp(cmd, "InOrder") == 0) {
             inOrder(root);
             printf("\n");
-        }
-        else if (strcmp(cmd, "PostOrder") == 0) {
+        } else if (strcmp(cmd, "PostOrder") == 0) {
             postOrder(root);
             printf("\n");
         }
@@ -1532,10 +1926,11 @@ int main() {
 
 ======================================== ./tuan7/b2(Binary_tree_path_sum).c ========================================
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
+
 
 typedef struct Node {
     int id;
@@ -1543,17 +1938,18 @@ typedef struct Node {
 } Node;
 
 #define MAXN 10005
-Node* nodes[MAXN];
+Node *nodes[MAXN];
 
-Node* createNode(int id) {
-    Node* node = (Node*)malloc(sizeof(Node));
+Node *createNode(int id) {
+    Node *node = (Node *)malloc(sizeof(Node));
     node->id = id;
     node->left = node->right = NULL;
     return node;
 }
 
-bool hasPathSum(Node* root, int targetSum, int currentSum) {
-    if (!root) return false;
+bool hasPathSum(Node *root, int targetSum, int currentSum) {
+    if (!root)
+        return false;
     currentSum += root->id;
 
     if (!root->left && !root->right) {
@@ -1567,12 +1963,14 @@ bool hasPathSum(Node* root, int targetSum, int currentSum) {
 int main() {
     char cmd[20];
     int u, v;
-    Node* root = NULL;
+    Node *root = NULL;
 
-    for (int i = 0; i < MAXN; i++) nodes[i] = NULL;
+    for (int i = 0; i < MAXN; i++)
+        nodes[i] = NULL;
 
     while (scanf("%s", cmd)) {
-        if (strcmp(cmd, "*") == 0) break;
+        if (strcmp(cmd, "*") == 0)
+            break;
 
         if (strcmp(cmd, "MakeRoot") == 0) {
             scanf("%d", &u);
@@ -1580,22 +1978,19 @@ int main() {
                 nodes[u] = createNode(u);
             }
             root = nodes[u];
-        }
-        else if (strcmp(cmd, "AddLeft") == 0) {
+        } else if (strcmp(cmd, "AddLeft") == 0) {
             scanf("%d %d", &u, &v);
             if (!nodes[u] && nodes[v] && nodes[v]->left == NULL) {
                 nodes[u] = createNode(u);
                 nodes[v]->left = nodes[u];
             }
-        }
-        else if (strcmp(cmd, "AddRight") == 0) {
+        } else if (strcmp(cmd, "AddRight") == 0) {
             scanf("%d %d", &u, &v);
             if (!nodes[u] && nodes[v] && nodes[v]->right == NULL) {
                 nodes[u] = createNode(u);
                 nodes[v]->right = nodes[u];
             }
-        }
-        else if (strcmp(cmd, "PathSum") == 0) {
+        } else if (strcmp(cmd, "PathSum") == 0) {
             scanf("%d", &u);
             if (root && hasPathSum(root, u, 0)) {
                 printf("True\n");
@@ -1612,43 +2007,48 @@ int main() {
 
 ======================================== ./tuan7/b3(Family_Tree).c ========================================
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
+
 typedef struct Node {
     char name[50];
-    struct Node* children[100]; 
+    struct Node *children[100];
     int childCount;
 } Node;
 
 #define MAXN 10005
-Node* nodes[MAXN];
+Node *nodes[MAXN];
 int nodeCount = 0;
-Node* getNode(char* name) {
+Node *getNode(char *name) {
     for (int i = 0; i < nodeCount; i++) {
-        if (strcmp(nodes[i]->name, name) == 0) return nodes[i];
+        if (strcmp(nodes[i]->name, name) == 0)
+            return nodes[i];
     }
-    Node* newNode = (Node*)malloc(sizeof(Node));
+    Node *newNode = (Node *)malloc(sizeof(Node));
     strcpy(newNode->name, name);
     newNode->childCount = 0;
     nodes[nodeCount++] = newNode;
     return newNode;
 }
-int countDescendants(Node* root) {
-    if (!root) return 0;
+int countDescendants(Node *root) {
+    if (!root)
+        return 0;
     int total = root->childCount;
     for (int i = 0; i < root->childCount; i++) {
         total += countDescendants(root->children[i]);
     }
     return total;
 }
-int countGenerations(Node* root) {
-    if (!root || root->childCount == 0) return 0;
+int countGenerations(Node *root) {
+    if (!root || root->childCount == 0)
+        return 0;
     int maxGen = 0;
     for (int i = 0; i < root->childCount; i++) {
         int g = countGenerations(root->children[i]);
-        if (g > maxGen) maxGen = g;
+        if (g > maxGen)
+            maxGen = g;
     }
     return 1 + maxGen;
 }
@@ -1657,16 +2057,18 @@ int main() {
     char child[50], parent[50];
     char cmd[20], param[50];
     while (scanf("%s", child)) {
-        if (strcmp(child, "***") == 0) break;
+        if (strcmp(child, "***") == 0)
+            break;
         scanf("%s", parent);
-        Node* cNode = getNode(child);
-        Node* pNode = getNode(parent);
+        Node *cNode = getNode(child);
+        Node *pNode = getNode(parent);
         pNode->children[pNode->childCount++] = cNode;
     }
     while (scanf("%s", cmd)) {
-        if (strcmp(cmd, "***") == 0) break;
+        if (strcmp(cmd, "***") == 0)
+            break;
         scanf("%s", param);
-        Node* node = getNode(param);
+        Node *node = getNode(param);
 
         if (strcmp(cmd, "descendants") == 0) {
             printf("%d\n", countDescendants(node));
@@ -1682,10 +2084,11 @@ int main() {
 
 ======================================== ./tuan7/b4(Check_balanced_binary_tree_and_compute_the_height).c ========================================
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
+
 
 typedef struct Node {
     int id;
@@ -1693,46 +2096,48 @@ typedef struct Node {
 } Node;
 
 #define MAXN 50005
-Node* nodes[MAXN];   
-Node* root = NULL;
+Node *nodes[MAXN];
+Node *root = NULL;
 
-Node* getNode(int id) {
+Node *getNode(int id) {
     if (nodes[id] == NULL) {
-        nodes[id] = (Node*)malloc(sizeof(Node));
+        nodes[id] = (Node *)malloc(sizeof(Node));
         nodes[id]->id = id;
         nodes[id]->left = nodes[id]->right = NULL;
     }
     return nodes[id];
 }
 
-int checkHeight(Node* node, bool* balanced) {
-    if (!node) return 0;
+int checkHeight(Node *node, bool *balanced) {
+    if (!node)
+        return 0;
     int lh = checkHeight(node->left, balanced);
     int rh = checkHeight(node->right, balanced);
-    if (abs(lh - rh) > 1) *balanced = false;
+    if (abs(lh - rh) > 1)
+        *balanced = false;
     return (lh > rh ? lh : rh) + 1;
 }
 
 int main() {
     char cmd[20];
     int u, v;
-    for (int i = 0; i < MAXN; i++) nodes[i] = NULL;
+    for (int i = 0; i < MAXN; i++)
+        nodes[i] = NULL;
 
     while (scanf("%s", cmd)) {
-        if (strcmp(cmd, "*") == 0) break;
+        if (strcmp(cmd, "*") == 0)
+            break;
 
         if (strcmp(cmd, "MakeRoot") == 0) {
             scanf("%d", &u);
             root = getNode(u);
-        }
-        else if (strcmp(cmd, "AddLeft") == 0) {
+        } else if (strcmp(cmd, "AddLeft") == 0) {
             scanf("%d %d", &u, &v);
             if (!nodes[u] && nodes[v] && nodes[v]->left == NULL) {
                 nodes[u] = getNode(u);
                 nodes[v]->left = nodes[u];
             }
-        }
-        else if (strcmp(cmd, "AddRight") == 0) {
+        } else if (strcmp(cmd, "AddRight") == 0) {
             scanf("%d %d", &u, &v);
             if (!nodes[u] && nodes[v] && nodes[v]->right == NULL) {
                 nodes[u] = getNode(u);
@@ -1759,16 +2164,16 @@ int main() {
 
 typedef struct Node {
     int id;
-    struct Node* children[100];
+    struct Node *children[100];
     int childCount;
 } Node;
 
 #define MAXN 10005
-Node* nodes[MAXN];
-Node* root = NULL;
-Node* getNode(int id) {
+Node *nodes[MAXN];
+Node *root = NULL;
+Node *getNode(int id) {
     if (nodes[id] == NULL) {
-        nodes[id] = (Node*)malloc(sizeof(Node));
+        nodes[id] = (Node *)malloc(sizeof(Node));
         nodes[id]->id = id;
         nodes[id]->childCount = 0;
     }
@@ -1776,16 +2181,18 @@ Node* getNode(int id) {
 }
 
 // Duyệt PreOrder
-void preorder(Node* node) {
-    if (!node) return;
+void preorder(Node *node) {
+    if (!node)
+        return;
     printf("%d ", node->id);
     for (int i = 0; i < node->childCount; i++) {
         preorder(node->children[i]);
     }
 }
 
-void inorder(Node* node) {
-    if (!node) return;
+void inorder(Node *node) {
+    if (!node)
+        return;
     int mid = node->childCount / 2;
     for (int i = 0; i < mid; i++) {
         inorder(node->children[i]);
@@ -1796,8 +2203,9 @@ void inorder(Node* node) {
     }
 }
 
-void postorder(Node* node) {
-    if (!node) return;
+void postorder(Node *node) {
+    if (!node)
+        return;
     for (int i = 0; i < node->childCount; i++) {
         postorder(node->children[i]);
     }
@@ -1808,32 +2216,30 @@ int main() {
     char cmd[20];
     int u, v;
 
-    for (int i = 0; i < MAXN; i++) nodes[i] = NULL;
+    for (int i = 0; i < MAXN; i++)
+        nodes[i] = NULL;
 
     while (scanf("%s", cmd)) {
-        if (strcmp(cmd, "*") == 0) break;
+        if (strcmp(cmd, "*") == 0)
+            break;
 
         if (strcmp(cmd, "MakeRoot") == 0) {
             scanf("%d", &u);
             root = getNode(u);
-        }
-        else if (strcmp(cmd, "Insert") == 0) {
+        } else if (strcmp(cmd, "Insert") == 0) {
             scanf("%d %d", &u, &v);
             if (!nodes[u] && nodes[v]) {
-                Node* child = getNode(u);
-                Node* parent = nodes[v];
+                Node *child = getNode(u);
+                Node *parent = nodes[v];
                 parent->children[parent->childCount++] = child;
             }
-        }
-        else if (strcmp(cmd, "PreOrder") == 0) {
+        } else if (strcmp(cmd, "PreOrder") == 0) {
             preorder(root);
             printf("\n");
-        }
-        else if (strcmp(cmd, "InOrder") == 0) {
+        } else if (strcmp(cmd, "InOrder") == 0) {
             inorder(root);
             printf("\n");
-        }
-        else if (strcmp(cmd, "PostOrder") == 0) {
+        } else if (strcmp(cmd, "PostOrder") == 0) {
             postorder(root);
             printf("\n");
         }
@@ -1852,18 +2258,18 @@ int main() {
 
 typedef struct Node {
     int id;
-    struct Node* children[100]; // danh sách con
+    struct Node *children[100]; // danh sách con
     int childCount;
 } Node;
 
 #define MAXN 50005
-Node* nodes[MAXN];
-Node* root = NULL;
+Node *nodes[MAXN];
+Node *root = NULL;
 
 // Tạo hoặc lấy node theo id
-Node* getNode(int id) {
+Node *getNode(int id) {
     if (nodes[id] == NULL) {
-        nodes[id] = (Node*)malloc(sizeof(Node));
+        nodes[id] = (Node *)malloc(sizeof(Node));
         nodes[id]->id = id;
         nodes[id]->childCount = 0;
     }
@@ -1871,17 +2277,20 @@ Node* getNode(int id) {
 }
 
 // Duyệt PreOrder: thăm node trước, rồi duyệt các con
-void preorder(Node* node) {
-    if (!node) return;
+void preorder(Node *node) {
+    if (!node)
+        return;
     printf("%d ", node->id);
     for (int i = 0; i < node->childCount; i++) {
         preorder(node->children[i]);
     }
 }
 
-// Duyệt InOrder: nếu có 1 con → duyệt con rồi node; nếu nhiều con → nửa đầu, node, nửa sau
-void inorder(Node* node) {
-    if (!node) return;
+// Duyệt InOrder: nếu có 1 con → duyệt con rồi node; nếu nhiều con → nửa đầu,
+// node, nửa sau
+void inorder(Node *node) {
+    if (!node)
+        return;
 
     if (node->childCount == 1) {
         inorder(node->children[0]);
@@ -1899,8 +2308,9 @@ void inorder(Node* node) {
 }
 
 // Duyệt PostOrder: duyệt các con trước, rồi thăm node
-void postorder(Node* node) {
-    if (!node) return;
+void postorder(Node *node) {
+    if (!node)
+        return;
     for (int i = 0; i < node->childCount; i++) {
         postorder(node->children[i]);
     }
@@ -1911,32 +2321,30 @@ int main() {
     char cmd[20];
     int u, v;
 
-    for (int i = 0; i < MAXN; i++) nodes[i] = NULL;
+    for (int i = 0; i < MAXN; i++)
+        nodes[i] = NULL;
 
     while (scanf("%s", cmd)) {
-        if (strcmp(cmd, "*") == 0) break;
+        if (strcmp(cmd, "*") == 0)
+            break;
 
         if (strcmp(cmd, "MakeRoot") == 0) {
             scanf("%d", &u);
             root = getNode(u);
-        }
-        else if (strcmp(cmd, "Insert") == 0) {
+        } else if (strcmp(cmd, "Insert") == 0) {
             scanf("%d %d", &u, &v);
             if (!nodes[u] && nodes[v]) {
-                Node* child = getNode(u);
-                Node* parent = nodes[v];
+                Node *child = getNode(u);
+                Node *parent = nodes[v];
                 parent->children[parent->childCount++] = child;
             }
-        }
-        else if (strcmp(cmd, "PreOrder") == 0) {
+        } else if (strcmp(cmd, "PreOrder") == 0) {
             preorder(root);
             printf("\n");
-        }
-        else if (strcmp(cmd, "InOrder") == 0) {
+        } else if (strcmp(cmd, "InOrder") == 0) {
             inorder(root);
             printf("\n");
-        }
-        else if (strcmp(cmd, "PostOrder") == 0) {
+        } else if (strcmp(cmd, "PostOrder") == 0) {
             postorder(root);
             printf("\n");
         }
@@ -1955,19 +2363,19 @@ int main() {
 
 typedef struct Node {
     int id;
-    struct Node* children[100];
+    struct Node *children[100];
     int childCount;
-    struct Node* parent;
+    struct Node *parent;
 } Node;
 
 #define MAXN 50005
-Node* nodes[MAXN];
-Node* root = NULL;
+Node *nodes[MAXN];
+Node *root = NULL;
 
 // Tạo hoặc lấy node theo id
-Node* getNode(int id) {
+Node *getNode(int id) {
     if (nodes[id] == NULL) {
-        nodes[id] = (Node*)malloc(sizeof(Node));
+        nodes[id] = (Node *)malloc(sizeof(Node));
         nodes[id]->id = id;
         nodes[id]->childCount = 0;
         nodes[id]->parent = NULL;
@@ -1976,18 +2384,20 @@ Node* getNode(int id) {
 }
 
 // Tính độ cao của nút (số tầng từ nút đến lá sâu nhất)
-int getHeight(Node* node) {
-    if (!node) return 0;
+int getHeight(Node *node) {
+    if (!node)
+        return 0;
     int maxH = 0;
     for (int i = 0; i < node->childCount; i++) {
         int h = getHeight(node->children[i]);
-        if (h > maxH) maxH = h;
+        if (h > maxH)
+            maxH = h;
     }
     return maxH + 1; // bao gồm chính nó
 }
 
 // Tính độ sâu của nút (số tầng từ gốc đến nút)
-int getDepth(Node* node) {
+int getDepth(Node *node) {
     int depth = 1; // gốc có độ sâu là 1
     while (node && node->parent) {
         node = node->parent;
@@ -2000,29 +2410,28 @@ int main() {
     char cmd[20];
     int u, v;
 
-    for (int i = 0; i < MAXN; i++) nodes[i] = NULL;
+    for (int i = 0; i < MAXN; i++)
+        nodes[i] = NULL;
 
     while (scanf("%s", cmd)) {
-        if (strcmp(cmd, "*") == 0) break;
+        if (strcmp(cmd, "*") == 0)
+            break;
 
         if (strcmp(cmd, "MakeRoot") == 0) {
             scanf("%d", &u);
             root = getNode(u);
-        }
-        else if (strcmp(cmd, "Insert") == 0) {
+        } else if (strcmp(cmd, "Insert") == 0) {
             scanf("%d %d", &u, &v);
             if (!nodes[u] && nodes[v]) {
-                Node* child = getNode(u);
-                Node* parent = nodes[v];
+                Node *child = getNode(u);
+                Node *parent = nodes[v];
                 parent->children[parent->childCount++] = child;
                 child->parent = parent;
             }
-        }
-        else if (strcmp(cmd, "Height") == 0) {
+        } else if (strcmp(cmd, "Height") == 0) {
             scanf("%d", &u);
             printf("%d\n", getHeight(nodes[u]));
-        }
-        else if (strcmp(cmd, "Depth") == 0) {
+        } else if (strcmp(cmd, "Depth") == 0) {
             scanf("%d", &u);
             printf("%d\n", getDepth(nodes[u]));
         }
@@ -2045,19 +2454,19 @@ typedef struct {
     int position;
 } Student;
 
-int compareGrade(const void* a, const void* b) {
-    return ((Student*)a)->grade - ((Student*)b)->grade;
+int compareGrade(const void *a, const void *b) {
+    return ((Student *)a)->grade - ((Student *)b)->grade;
 }
 
-int compareID(const void* a, const void* b) {
-    return strcmp(((Student*)a)->id, ((Student*)b)->id);
+int compareID(const void *a, const void *b) {
+    return strcmp(((Student *)a)->id, ((Student *)b)->id);
 }
 
 int main() {
     int n;
     scanf("%d", &n);
 
-    Student* students = (Student*)malloc(n * sizeof(Student));
+    Student *students = (Student *)malloc(n * sizeof(Student));
 
     for (int i = 0; i < n; i++) {
         scanf("%s %d", students[i].id, &students[i].grade);
@@ -2086,11 +2495,13 @@ int main() {
 #include <stdio.h>
 #include <stdlib.h>
 
-int cmp(const void* a, const void* b) {
-    int x = *(int*)a;
-    int y = *(int*)b;
-    if (x < y) return -1;
-    if (x > y) return 1;
+int cmp(const void *a, const void *b) {
+    int x = *(int *)a;
+    int y = *(int *)b;
+    if (x < y)
+        return -1;
+    if (x > y)
+        return 1;
     return 0;
 }
 
@@ -2098,11 +2509,13 @@ int main() {
     int n, m;
     scanf("%d %d", &n, &m);
 
-    int *A = (int*)malloc(n * sizeof(int));
-    int *B = (int*)malloc(m * sizeof(int));
+    int *A = (int *)malloc(n * sizeof(int));
+    int *B = (int *)malloc(m * sizeof(int));
 
-    for (int i = 0; i < n; i++) scanf("%d", &A[i]);
-    for (int j = 0; j < m; j++) scanf("%d", &B[j]);
+    for (int i = 0; i < n; i++)
+        scanf("%d", &A[i]);
+    for (int j = 0; j < m; j++)
+        scanf("%d", &B[j]);
     qsort(B, m, sizeof(int), cmp);
 
     int count = 0;
@@ -2127,7 +2540,7 @@ int main() {
 #include <stdlib.h>
 
 int cmp(const void *a, const void *b) {
-    return (*(int*)a - *(int*)b);
+    return (*(int *)a - *(int *)b);
 }
 
 long long count_pairs(int *a, int n, long long x) {
@@ -2136,7 +2549,7 @@ long long count_pairs(int *a, int n, long long x) {
 
     while (l < r) {
         if ((long long)a[l] + a[r] <= x) {
-            ans += (r - l);  // tất cả cặp (l, l+1..r)
+            ans += (r - l); // tất cả cặp (l, l+1..r)
             l++;
         } else {
             r--;
@@ -2150,8 +2563,9 @@ int main() {
     int n;
     scanf("%d", &n);
 
-    int *a = (int*)malloc(n * sizeof(int));
-    for (int i = 0; i < n; i++) scanf("%d", &a[i]);
+    int *a = (int *)malloc(n * sizeof(int));
+    for (int i = 0; i < n; i++)
+        scanf("%d", &a[i]);
 
     qsort(a, n, sizeof(int), cmp);
 
@@ -2192,7 +2606,8 @@ int main() {
         while (cnt[v] > 0) {
             printf("%d", v);
             printed++;
-            if (printed < n) printf(" ");
+            if (printed < n)
+                printf(" ");
             cnt[v]--;
         }
     }
@@ -2204,8 +2619,9 @@ int main() {
 ======================================== ./tuan8/b5(Sort_candidates_of_a_Contest).c ========================================
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+
 
 typedef struct {
     char code[15];
@@ -2215,7 +2631,7 @@ typedef struct {
 int cmp(const void *a, const void *b) {
     Candidate *x = (Candidate *)a;
     Candidate *y = (Candidate *)b;
-    return y->score - x->score;   // giảm dần
+    return y->score - x->score; // giảm dần
 }
 
 int main() {
@@ -2226,10 +2642,12 @@ int main() {
     int score;
 
     while (1) {
-        if (scanf("%s", code) != 1) return 0;
+        if (scanf("%s", code) != 1)
+            return 0;
 
-        if (strcmp(code, "#") == 0) break;
-        
+        if (strcmp(code, "#") == 0)
+            break;
+
         scanf("%d", &score);
 
         strcpy(a[n].code, code);
@@ -2298,8 +2716,10 @@ int cmp(const void *x, const void *y) {
     const int *v2 = (const int *)y;
 
     for (int i = 0; i < m; i++) {
-        if (v1[i] < v2[i]) return -1;
-        if (v1[i] > v2[i]) return 1;
+        if (v1[i] < v2[i])
+            return -1;
+        if (v1[i] > v2[i])
+            return 1;
     }
     return 0;
 }
@@ -2319,6 +2739,1016 @@ int main() {
         printf("\n");
     }
 
+    return 0;
+}
+
+
+
+======================================== ./tuan9/b1(Count_number_of_pairs_of_sequence_of_distinct_integer_sum_equal_to_Q).c ========================================
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int cmp(const void *a, const void *b) {
+    return *(int *)a - *(int *)b;
+}
+
+int main() {
+    int n, Q;
+    scanf("%d %d", &n, &Q);
+    int *a = (int *)malloc(n * sizeof(int));
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &a[i]);
+    }
+    qsort(a, n, sizeof(int), cmp);
+    int left = 0, right = n - 1, count = 0;
+    while (left < right) {
+        if (a[left] + a[right] == Q) {
+            count++;
+            left++;
+            right--;
+        } else if (a[left] + a[right] < Q) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+    printf("%d\n", count);
+    free(a);
+    return 0;
+}
+
+
+
+======================================== ./tuan9/b10(BANK_-_Query_Total_transaction_from).c ========================================
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_LEN 25
+#define HASH_SIZE 200003 // số nguyên tố lớn
+
+typedef struct Node {
+    char account[MAX_LEN];
+    long total;
+    struct Node *next;
+} Node;
+
+Node *hash_table[HASH_SIZE];
+
+/* hash function (djb2) */
+unsigned int hash(const char *s) {
+    unsigned int h = 5381;
+    while (*s)
+        h = ((h << 5) + h) + (*s++);
+    return h % HASH_SIZE;
+}
+
+/* add money to account */
+void add_money(const char *acc, int money) {
+    unsigned int h = hash(acc);
+    Node *cur = hash_table[h];
+
+    while (cur) {
+        if (strcmp(cur->account, acc) == 0) {
+            cur->total += money;
+            return;
+        }
+        cur = cur->next;
+    }
+
+    // chưa tồn tại
+    Node *node = (Node *)malloc(sizeof(Node));
+    strcpy(node->account, acc);
+    node->total = money;
+    node->next = hash_table[h];
+    hash_table[h] = node;
+}
+
+/* get total money */
+long get_total(const char *acc) {
+    unsigned int h = hash(acc);
+    Node *cur = hash_table[h];
+
+    while (cur) {
+        if (strcmp(cur->account, acc) == 0)
+            return cur->total;
+        cur = cur->next;
+    }
+    return 0;
+}
+
+int main() {
+    char from[MAX_LEN], to[MAX_LEN], time[10], atm[15];
+    int money;
+
+    /* DATA BLOCK */
+    while (1) {
+        char line[200];
+        if (!fgets(line, sizeof(line), stdin))
+            break;
+        if (line[0] == '#')
+            break;
+
+        sscanf(line, "%s %s %d %s %s", from, to, &money, time, atm);
+
+        add_money(from, money);
+    }
+
+    /* QUERY BLOCK */
+    while (1) {
+        char line[100], acc[MAX_LEN];
+        if (!fgets(line, sizeof(line), stdin))
+            break;
+        if (line[0] == '#')
+            break;
+
+        sscanf(line, "?total_money_transaction_from %s", acc);
+        printf("%ld\n", get_total(acc));
+    }
+
+    return 0;
+}
+
+
+
+======================================== ./tuan9/b11(BST_-_Insertion_and_PreOrder_Traversal).c ========================================
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Node {
+    int key;
+    struct Node *left, *right;
+} Node;
+
+/* tạo node mới */
+Node *newNode(int k) {
+    Node *p = (Node *)malloc(sizeof(Node));
+    p->key = k;
+    p->left = p->right = NULL;
+    return p;
+}
+
+/* insert vào BST, không chèn nếu trùng */
+Node *insert(Node *root, int k) {
+    if (root == NULL)
+        return newNode(k);
+
+    if (k < root->key)
+        root->left = insert(root->left, k);
+    else if (k > root->key)
+        root->right = insert(root->right, k);
+
+    return root; // k == root->key thì bỏ qua
+}
+
+/* duyệt pre-order */
+void preorder(Node *root) {
+    if (root == NULL)
+        return;
+    printf("%d ", root->key);
+    preorder(root->left);
+    preorder(root->right);
+}
+
+int main() {
+    Node *root = NULL;
+    char cmd[20];
+    int k;
+
+    while (1) {
+        if (scanf("%s", cmd) != 1)
+            break;
+        if (cmd[0] == '#')
+            break;
+
+        if (strcmp(cmd, "insert") == 0) {
+            scanf("%d", &k);
+            root = insert(root, k);
+        }
+    }
+
+    preorder(root);
+    return 0;
+}
+
+
+
+======================================== ./tuan9/b12(BST_Creation_and_Query_about_PreOrder_and_PostOrder_Traversal).c ========================================
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Node {
+    int key;
+    struct Node *left, *right;
+} Node;
+
+/* tạo node mới */
+Node *newNode(int k) {
+    Node *p = (Node *)malloc(sizeof(Node));
+    p->key = k;
+    p->left = p->right = NULL;
+    return p;
+}
+
+/* insert vào BST, bỏ qua nếu trùng */
+Node *insert(Node *root, int k) {
+    if (root == NULL)
+        return newNode(k);
+
+    if (k < root->key)
+        root->left = insert(root->left, k);
+    else if (k > root->key)
+        root->right = insert(root->right, k);
+
+    return root;
+}
+
+/* preorder traversal */
+void preorder(Node *root) {
+    if (root == NULL)
+        return;
+    printf("%d ", root->key);
+    preorder(root->left);
+    preorder(root->right);
+}
+
+/* postorder traversal */
+void postorder(Node *root) {
+    if (root == NULL)
+        return;
+    postorder(root->left);
+    postorder(root->right);
+    printf("%d ", root->key);
+}
+
+int main() {
+    Node *root = NULL;
+    char cmd[30];
+    int k;
+
+    while (1) {
+        if (scanf("%s", cmd) != 1)
+            break;
+        if (cmd[0] == '#')
+            break;
+
+        if (strcmp(cmd, "insert") == 0) {
+            scanf("%d", &k);
+            root = insert(root, k);
+        } else if (strcmp(cmd, "preorder") == 0) {
+            preorder(root);
+            printf("\n");
+        } else if (strcmp(cmd, "postorder") == 0) {
+            postorder(root);
+            printf("\n");
+        }
+    }
+
+    return 0;
+}
+
+
+
+======================================== ./tuan9/b2(Check_Existence_in_a_Set).c ========================================
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define HASH_SIZE 1000003
+
+typedef struct Node {
+    long long key;
+    struct Node *next;
+} Node;
+
+Node *hash_table[HASH_SIZE];
+
+long long hash_func(long long key) {
+    return (key % HASH_SIZE + HASH_SIZE) % HASH_SIZE;
+}
+
+int has_key(long long key) {
+    long long h = hash_func(key);
+    Node *node = hash_table[h];
+    while (node) {
+        if (node->key == key)
+            return 1;
+        node = node->next;
+    }
+    return 0;
+}
+
+void insert(long long key) {
+    long long h = hash_func(key);
+    Node *node = (Node *)malloc(sizeof(Node));
+    node->key = key;
+    node->next = hash_table[h];
+    hash_table[h] = node;
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+    long long *a = (long long *)malloc(n * sizeof(long long));
+    for (int i = 0; i < n; i++) {
+        scanf("%lld", &a[i]);
+    }
+    for (int i = 0; i < n; i++) {
+        if (has_key(a[i])) {
+            printf("1\n");
+        } else {
+            printf("0\n");
+        }
+        insert(a[i]);
+    }
+    free(a);
+    return 0;
+}
+
+
+
+======================================== ./tuan9/b3(Hash_Over_Integers).c ========================================
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define HASH_SIZE 1000003
+
+typedef struct Node {
+    long long key;
+    struct Node *next;
+} Node;
+
+Node *hash_table[HASH_SIZE];
+
+long long hash_func(long long key) {
+    return (key % HASH_SIZE + HASH_SIZE) % HASH_SIZE;
+}
+
+int has_key(long long key) {
+    long long h = hash_func(key);
+    Node *node = hash_table[h];
+    while (node) {
+        if (node->key == key)
+            return 1;
+        node = node->next;
+    }
+    return 0;
+}
+
+void insert_key(long long key) {
+    long long h = hash_func(key);
+    Node *node = (Node *)malloc(sizeof(Node));
+    node->key = key;
+    node->next = hash_table[h];
+    hash_table[h] = node;
+}
+
+int main() {
+    char line[100];
+    // Read initial keys
+    while (fgets(line, sizeof(line), stdin)) {
+        if (line[0] == '*' && line[1] == '\n')
+            break;
+        long long k = atoll(line);
+        insert_key(k);
+    }
+    // Read actions
+    while (fgets(line, sizeof(line), stdin)) {
+        if (strncmp(line, "***", 3) == 0)
+            break;
+        char cmd[10];
+        long long k;
+        sscanf(line, "%s %lld", cmd, &k);
+        if (strcmp(cmd, "find") == 0) {
+            printf("%d\n", has_key(k));
+        } else if (strcmp(cmd, "insert") == 0) {
+            if (!has_key(k)) {
+                insert_key(k);
+                printf("1\n");
+            } else {
+                printf("0\n");
+            }
+        }
+    }
+    return 0;
+}
+
+
+
+======================================== ./tuan9/b4(Hash_Over_Strings).c ========================================
+
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    int n, m;
+    scanf("%d %d", &n, &m);
+    for (int i = 0; i < n; i++) {
+        char str[201];
+        scanf("%s", str);
+        long long hash = 0;
+        for (int j = 0; str[j]; j++) {
+            hash = (hash * 256LL + str[j]) % m;
+        }
+        printf("%lld\n", hash);
+    }
+    return 0;
+}
+
+
+
+======================================== ./tuan9/b5(Store_&_Search_String).c ========================================
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define HASH_SIZE 1000003
+
+typedef struct Node {
+    char key[51];
+    struct Node *next;
+} Node;
+
+Node *hash_table[HASH_SIZE];
+
+long long hash_func(char *s) {
+    long long h = 0;
+    for (int i = 0; s[i]; i++) {
+        h = (h * 256LL + s[i]) % HASH_SIZE;
+    }
+    return h;
+}
+
+int has_key(char *k) {
+    long long h = hash_func(k);
+    Node *node = hash_table[h];
+    while (node) {
+        if (strcmp(node->key, k) == 0)
+            return 1;
+        node = node->next;
+    }
+    return 0;
+}
+
+void insert_key(char *k) {
+    long long h = hash_func(k);
+    Node *node = (Node *)malloc(sizeof(Node));
+    strcpy(node->key, k);
+    node->next = hash_table[h];
+    hash_table[h] = node;
+}
+
+int main() {
+    char line[100];
+    // Read initial keys
+    while (fgets(line, sizeof(line), stdin)) {
+        line[strcspn(line, "\n")] = 0; // remove \n
+        if (strcmp(line, "*") == 0)
+            break;
+        insert_key(line);
+    }
+    // Read actions
+    while (fgets(line, sizeof(line), stdin)) {
+        line[strcspn(line, "\n")] = 0;
+        if (strcmp(line, "***") == 0)
+            break;
+        char cmd[10];
+        char k[51];
+        sscanf(line, "%s %s", cmd, k);
+        if (strcmp(cmd, "find") == 0) {
+            printf("%d\n", has_key(k));
+        } else if (strcmp(cmd, "insert") == 0) {
+            if (!has_key(k)) {
+                insert_key(k);
+                printf("1\n");
+            } else {
+                printf("0\n");
+            }
+        }
+    }
+    return 0;
+}
+
+
+
+======================================== ./tuan9/b6(Word_Frequency_in_Text).c ========================================
+
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+#define HASH_SIZE 1000003
+
+typedef struct Node {
+    char word[21];
+    int count;
+    struct Node *next;
+} Node;
+
+Node *hash_table[HASH_SIZE];
+
+long long hash_func(char *s) {
+    long long h = 0;
+    for (int i = 0; s[i]; i++) {
+        h = (h * 256LL + s[i]) % HASH_SIZE;
+    }
+    return h;
+}
+
+Node *has_key(char *k) {
+    long long h = hash_func(k);
+    Node *node = hash_table[h];
+    while (node) {
+        if (strcmp(node->word, k) == 0)
+            return node;
+        node = node->next;
+    }
+    return NULL;
+}
+
+void insert_key(char *k) {
+    long long h = hash_func(k);
+    Node *node = (Node *)malloc(sizeof(Node));
+    strcpy(node->word, k);
+    node->count = 1;
+    node->next = hash_table[h];
+    hash_table[h] = node;
+}
+
+int cmp(const void *a, const void *b) {
+    Node *na = *(Node **)a;
+    Node *nb = *(Node **)b;
+    return strcmp(na->word, nb->word);
+}
+
+int main() {
+    char buffer[1000000];
+    int len = 0;
+    char line[1000];
+    while (fgets(line, sizeof(line), stdin)) {
+        strcpy(buffer + len, line);
+        len += strlen(line);
+    }
+    buffer[len] = 0;
+    char *p = buffer;
+    char word[21];
+    int i = 0;
+    while (*p) {
+        if (isalnum(*p)) {
+            if (i < 20) {
+                word[i++] = *p;
+            }
+        } else {
+            if (i > 0) {
+                word[i] = 0;
+                Node *node = has_key(word);
+                if (node) {
+                    node->count++;
+                } else {
+                    insert_key(word);
+                }
+                i = 0;
+            }
+        }
+        p++;
+    }
+    if (i > 0) {
+        word[i] = 0;
+        Node *node = has_key(word);
+        if (node) {
+            node->count++;
+        } else {
+            insert_key(word);
+        }
+    }
+    Node *all_words[10000];
+    int num_words = 0;
+    for (int j = 0; j < HASH_SIZE; j++) {
+        Node *node = hash_table[j];
+        while (node) {
+            all_words[num_words++] = node;
+            node = node->next;
+        }
+    }
+    qsort(all_words, num_words, sizeof(Node *), cmp);
+    for (int j = 0; j < num_words; j++) {
+        printf("%s %d\n", all_words[j]->word, all_words[j]->count);
+    }
+    return 0;
+}
+
+
+
+======================================== ./tuan9/b7(BST_with_insertion_and_removal_operations).c ========================================
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Node {
+    int key;
+    struct Node *left;
+    struct Node *right;
+} Node;
+
+Node *root = NULL;
+int keys[10000];
+int key_count;
+
+Node *create_node(int key) {
+    Node *node = (Node *)malloc(sizeof(Node));
+    node->key = key;
+    node->left = node->right = NULL;
+    return node;
+}
+
+void insert_iter(Node **root, int key) {
+    Node *newnode = create_node(key);
+    if (*root == NULL) {
+        *root = newnode;
+        return;
+    }
+    Node *curr = *root;
+    Node *parent = NULL;
+    while (curr) {
+        parent = curr;
+        if (key < curr->key) {
+            curr = curr->left;
+        } else if (key > curr->key) {
+            curr = curr->right;
+        } else {
+            free(newnode);
+            return;
+        }
+    }
+    if (key < parent->key) {
+        parent->left = newnode;
+    } else {
+        parent->right = newnode;
+    }
+}
+
+Node *find_min(Node *node) {
+    while (node->left)
+        node = node->left;
+    return node;
+}
+
+void remove_node(Node **root, int key) {
+    if (*root == NULL)
+        return;
+    if (key < (*root)->key) {
+        remove_node(&(*root)->left, key);
+    } else if (key > (*root)->key) {
+        remove_node(&(*root)->right, key);
+    } else {
+        if ((*root)->left == NULL) {
+            Node *temp = *root;
+            *root = (*root)->right;
+            free(temp);
+        } else if ((*root)->right == NULL) {
+            Node *temp = *root;
+            *root = (*root)->left;
+            free(temp);
+        } else {
+            Node *temp = find_min((*root)->right);
+            (*root)->key = temp->key;
+            remove_node(&(*root)->right, temp->key);
+        }
+    }
+}
+
+void collect_preorder(Node *root) {
+    if (root) {
+        keys[key_count++] = root->key;
+        collect_preorder(root->left);
+        collect_preorder(root->right);
+    }
+}
+
+void collect_postorder(Node *root) {
+    if (root) {
+        collect_postorder(root->left);
+        collect_postorder(root->right);
+        keys[key_count++] = root->key;
+    }
+}
+
+int main() {
+    char line[100];
+    while (fgets(line, sizeof(line), stdin)) {
+        line[strcspn(line, "\n")] = 0;
+        if (strcmp(line, "#") == 0)
+            break;
+        char cmd[20];
+        int k;
+        if (sscanf(line, "%s %d", cmd, &k) == 2) {
+            if (strcmp(cmd, "insert") == 0) {
+                insert_iter(&root, k);
+            } else if (strcmp(cmd, "remove") == 0) {
+                remove_node(&root, k);
+            }
+        } else {
+            if (strcmp(line, "preorder") == 0) {
+                key_count = 0;
+                collect_preorder(root);
+                for (int i = 0; i < key_count; i++) {
+                    printf("%d", keys[i]);
+                    if (i < key_count - 1)
+                        printf(" ");
+                }
+                printf("\n");
+            } else if (strcmp(line, "postorder") == 0) {
+                key_count = 0;
+                collect_postorder(root);
+                for (int i = 0; i < key_count; i++) {
+                    printf("%d", keys[i]);
+                    if (i < key_count - 1)
+                        printf(" ");
+                }
+                printf("\n");
+            }
+        }
+    }
+    return 0;
+}
+
+
+
+======================================== ./tuan9/b8(BST_Build_the_BST_from_pre-order_sequence_of_nodes).c ========================================
+
+#include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+
+typedef struct Node {
+    int key;
+    struct Node *left;
+    struct Node *right;
+} Node;
+
+int *a;
+int n;
+int idx;
+
+Node *create_node(int key) {
+    Node *node = (Node *)malloc(sizeof(Node));
+    node->key = key;
+    node->left = node->right = NULL;
+    return node;
+}
+
+Node *build(int min, int max) {
+    if (idx >= n)
+        return NULL;
+    int val = a[idx];
+    if (val <= min || val >= max)
+        return NULL;
+    idx++;
+    Node *node = create_node(val);
+    node->left = build(min, val);
+    node->right = build(val, max);
+    return node;
+}
+
+int keys[50000];
+int key_count;
+
+void collect_postorder(Node *root) {
+    if (root) {
+        collect_postorder(root->left);
+        collect_postorder(root->right);
+        keys[key_count++] = root->key;
+    }
+}
+
+int main() {
+    scanf("%d", &n);
+    a = (int *)malloc(n * sizeof(int));
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &a[i]);
+    }
+    idx = 0;
+    Node *root = build(INT_MIN, INT_MAX);
+    if (root && idx == n) {
+        key_count = 0;
+        collect_postorder(root);
+        for (int i = 0; i < key_count; i++) {
+            printf("%d", keys[i]);
+            if (i < key_count - 1)
+                printf(" ");
+        }
+        printf("\n");
+    } else {
+        printf("NULL\n");
+    }
+    free(a);
+    return 0;
+}
+
+
+
+======================================== ./tuan9/b9(Analyze_sales_order_of_an_e-commerce_company).c ========================================
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Order {
+    char customer[11];
+    char product[11];
+    int price;
+    char shop[11];
+    int time_sec;
+} Order;
+
+typedef struct ShopNode {
+    char shop[11];
+    long long sum;
+    struct ShopNode *next;
+} ShopNode;
+
+typedef struct CustShopNode {
+    char key[22];
+    long long sum;
+    struct CustShopNode *next;
+} CustShopNode;
+
+Order orders[100000];
+int num_orders = 0;
+long long total_revenue = 0;
+ShopNode *shop_hash[1000003];
+CustShopNode *custshop_hash[1000003];
+int order_indices[100000];
+long long prefix[100001];
+
+long long hash_func(char *s) {
+    long long h = 0;
+    for (int i = 0; s[i]; i++) {
+        h = (h * 256LL + s[i]) % 1000003;
+    }
+    return h;
+}
+
+void add_shop(char *shop, int price) {
+    long long h = hash_func(shop);
+    ShopNode *node = shop_hash[h];
+    while (node) {
+        if (strcmp(node->shop, shop) == 0) {
+            node->sum += price;
+            return;
+        }
+        node = node->next;
+    }
+    node = (ShopNode *)malloc(sizeof(ShopNode));
+    strcpy(node->shop, shop);
+    node->sum = price;
+    node->next = shop_hash[h];
+    shop_hash[h] = node;
+}
+
+long long get_shop_sum(char *shop) {
+    long long h = hash_func(shop);
+    ShopNode *node = shop_hash[h];
+    while (node) {
+        if (strcmp(node->shop, shop) == 0)
+            return node->sum;
+        node = node->next;
+    }
+    return 0;
+}
+
+void add_custshop(char *customer, char *shop, int price) {
+    char key[22];
+    strcpy(key, customer);
+    strcat(key, shop);
+    long long h = hash_func(key);
+    CustShopNode *node = custshop_hash[h];
+    while (node) {
+        if (strcmp(node->key, key) == 0) {
+            node->sum += price;
+            return;
+        }
+        node = node->next;
+    }
+    node = (CustShopNode *)malloc(sizeof(CustShopNode));
+    strcpy(node->key, key);
+    node->sum = price;
+    node->next = custshop_hash[h];
+    custshop_hash[h] = node;
+}
+
+long long get_custshop_sum(char *customer, char *shop) {
+    char key[22];
+    strcpy(key, customer);
+    strcat(key, shop);
+    long long h = hash_func(key);
+    CustShopNode *node = custshop_hash[h];
+    while (node) {
+        if (strcmp(node->key, key) == 0)
+            return node->sum;
+        node = node->next;
+    }
+    return 0;
+}
+
+int time_to_seconds(char *time) {
+    int h, m, s;
+    sscanf(time, "%d:%d:%d", &h, &m, &s);
+    return h * 3600 + m * 60 + s;
+}
+
+int cmp_time(const void *a, const void *b) {
+    int ia = *(int *)a;
+    int ib = *(int *)b;
+    return orders[ia].time_sec - orders[ib].time_sec;
+}
+
+int main() {
+    char line[100];
+    while (fgets(line, sizeof(line), stdin)) {
+        line[strcspn(line, "\n")] = 0;
+        if (strcmp(line, "#") == 0)
+            break;
+        char customer[11], product[11], shop[11], time_str[9];
+        int price;
+        sscanf(line, "%s %s %d %s %s", customer, product, &price, shop,
+               time_str);
+        int time_sec = time_to_seconds(time_str);
+        strcpy(orders[num_orders].customer, customer);
+        strcpy(orders[num_orders].product, product);
+        orders[num_orders].price = price;
+        strcpy(orders[num_orders].shop, shop);
+        orders[num_orders].time_sec = time_sec;
+        add_shop(shop, price);
+        add_custshop(customer, shop, price);
+        total_revenue += price;
+        num_orders++;
+    }
+    // prepare time
+    for (int i = 0; i < num_orders; i++)
+        order_indices[i] = i;
+    qsort(order_indices, num_orders, sizeof(int), cmp_time);
+    prefix[0] = 0;
+    for (int i = 1; i <= num_orders; i++) {
+        prefix[i] = prefix[i - 1] + orders[order_indices[i - 1]].price;
+    }
+    // queries
+    while (fgets(line, sizeof(line), stdin)) {
+        line[strcspn(line, "\n")] = 0;
+        if (strcmp(line, "#") == 0)
+            break;
+        char *query = strtok(line, " ");
+        if (strcmp(query, "?total_number_orders") == 0) {
+            printf("%d\n", num_orders);
+        } else if (strcmp(query, "?total_revenue") == 0) {
+            printf("%lld\n", total_revenue);
+        } else if (strcmp(query, "?revenue_of_shop") == 0) {
+            char *shop = strtok(NULL, " ");
+            printf("%lld\n", get_shop_sum(shop));
+        } else if (strcmp(query, "?total_consume_of_customer_shop") == 0) {
+            char *customer = strtok(NULL, " ");
+            char *shop = strtok(NULL, " ");
+            printf("%lld\n", get_custshop_sum(customer, shop));
+        } else if (strcmp(query, "?total_revenue_in_period") == 0) {
+            char *from = strtok(NULL, " ");
+            char *to = strtok(NULL, " ");
+            int from_sec = time_to_seconds(from);
+            int to_sec = time_to_seconds(to);
+            int low = 0, high = num_orders;
+            while (low < high) {
+                int mid = (low + high) / 2;
+                if (orders[order_indices[mid]].time_sec >= from_sec)
+                    high = mid;
+                else
+                    low = mid + 1;
+            }
+            int start = low;
+            low = 0, high = num_orders;
+            while (low < high) {
+                int mid = (low + high) / 2;
+                if (orders[order_indices[mid]].time_sec > to_sec)
+                    high = mid;
+                else
+                    low = mid + 1;
+            }
+            int end = low;
+            long long sum = prefix[end] - prefix[start];
+            printf("%lld\n", sum);
+        }
+    }
     return 0;
 }
 
