@@ -2,5 +2,8 @@
 *.exe
 # no rac
 rac.c
-
+#no clang-format
+.clang-format
+#no vscode
+.vscode/
 
