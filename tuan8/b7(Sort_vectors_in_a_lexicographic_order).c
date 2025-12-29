@@ -9,8 +9,10 @@ int cmp(const void *x, const void *y) {
     const int *v2 = (const int *)y;
 
     for (int i = 0; i < m; i++) {
-        if (v1[i] < v2[i]) return -1;
-        if (v1[i] > v2[i]) return 1;
+        if (v1[i] < v2[i])
+            return -1;
+        if (v1[i] > v2[i])
+            return 1;
     }
     return 0;
 }

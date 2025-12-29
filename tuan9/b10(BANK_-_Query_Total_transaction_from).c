@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define MAX_LEN 25
-#define HASH_SIZE 200003   // số nguyên tố lớn
+#define HASH_SIZE 200003 // số nguyên tố lớn
 
 typedef struct Node {
     char account[MAX_LEN];
@@ -62,11 +62,12 @@ int main() {
     /* DATA BLOCK */
     while (1) {
         char line[200];
-        if (!fgets(line, sizeof(line), stdin)) break;
-        if (line[0] == '#') break;
+        if (!fgets(line, sizeof(line), stdin))
+            break;
+        if (line[0] == '#')
+            break;
 
-        sscanf(line, "%s %s %d %s %s",
-               from, to, &money, time, atm);
+        sscanf(line, "%s %s %d %s %s", from, to, &money, time, atm);
 
         add_money(from, money);
     }
@@ -74,8 +75,10 @@ int main() {
     /* QUERY BLOCK */
     while (1) {
         char line[100], acc[MAX_LEN];
-        if (!fgets(line, sizeof(line), stdin)) break;
-        if (line[0] == '#') break;
+        if (!fgets(line, sizeof(line), stdin))
+            break;
+        if (line[0] == '#')
+            break;
 
         sscanf(line, "?total_money_transaction_from %s", acc);
         printf("%ld\n", get_total(acc));

@@ -5,10 +5,10 @@
 
 typedef struct Node {
     long long key;
-    struct Node* next;
+    struct Node *next;
 } Node;
 
-Node* hash_table[HASH_SIZE];
+Node *hash_table[HASH_SIZE];
 
 long long hash_func(long long key) {
     return (key % HASH_SIZE + HASH_SIZE) % HASH_SIZE;
@@ -16,9 +16,10 @@ long long hash_func(long long key) {
 
 int has_key(long long key) {
     long long h = hash_func(key);
-    Node* node = hash_table[h];
-    while(node) {
-        if(node->key == key) return 1;
+    Node *node = hash_table[h];
+    while (node) {
+        if (node->key == key)
+            return 1;
         node = node->next;
     }
     return 0;
@@ -26,7 +27,7 @@ int has_key(long long key) {
 
 void insert(long long key) {
     long long h = hash_func(key);
-    Node* node = (Node*)malloc(sizeof(Node));
+    Node *node = (Node *)malloc(sizeof(Node));
     node->key = key;
     node->next = hash_table[h];
     hash_table[h] = node;
@@ -35,12 +36,12 @@ void insert(long long key) {
 int main() {
     int n;
     scanf("%d", &n);
-    long long* a = (long long*)malloc(n * sizeof(long long));
-    for(int i = 0; i < n; i++) {
+    long long *a = (long long *)malloc(n * sizeof(long long));
+    for (int i = 0; i < n; i++) {
         scanf("%lld", &a[i]);
     }
-    for(int i = 0; i < n; i++) {
-        if(has_key(a[i])) {
+    for (int i = 0; i < n; i++) {
+        if (has_key(a[i])) {
             printf("1\n");
         } else {
             printf("0\n");

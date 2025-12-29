@@ -1,7 +1,8 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
+
 
 typedef struct Node {
     int id;
@@ -9,17 +10,18 @@ typedef struct Node {
 } Node;
 
 #define MAXN 10005
-Node* nodes[MAXN];
+Node *nodes[MAXN];
 
-Node* createNode(int id) {
-    Node* node = (Node*)malloc(sizeof(Node));
+Node *createNode(int id) {
+    Node *node = (Node *)malloc(sizeof(Node));
     node->id = id;
     node->left = node->right = NULL;
     return node;
 }
 
-bool hasPathSum(Node* root, int targetSum, int currentSum) {
-    if (!root) return false;
+bool hasPathSum(Node *root, int targetSum, int currentSum) {
+    if (!root)
+        return false;
     currentSum += root->id;
 
     if (!root->left && !root->right) {
@@ -33,12 +35,14 @@ bool hasPathSum(Node* root, int targetSum, int currentSum) {
 int main() {
     char cmd[20];
     int u, v;
-    Node* root = NULL;
+    Node *root = NULL;
 
-    for (int i = 0; i < MAXN; i++) nodes[i] = NULL;
+    for (int i = 0; i < MAXN; i++)
+        nodes[i] = NULL;
 
     while (scanf("%s", cmd)) {
-        if (strcmp(cmd, "*") == 0) break;
+        if (strcmp(cmd, "*") == 0)
+            break;
 
         if (strcmp(cmd, "MakeRoot") == 0) {
             scanf("%d", &u);
@@ -46,22 +50,19 @@ int main() {
                 nodes[u] = createNode(u);
             }
             root = nodes[u];
-        }
-        else if (strcmp(cmd, "AddLeft") == 0) {
+        } else if (strcmp(cmd, "AddLeft") == 0) {
             scanf("%d %d", &u, &v);
             if (!nodes[u] && nodes[v] && nodes[v]->left == NULL) {
                 nodes[u] = createNode(u);
                 nodes[v]->left = nodes[u];
             }
-        }
-        else if (strcmp(cmd, "AddRight") == 0) {
+        } else if (strcmp(cmd, "AddRight") == 0) {
             scanf("%d %d", &u, &v);
             if (!nodes[u] && nodes[v] && nodes[v]->right == NULL) {
                 nodes[u] = createNode(u);
                 nodes[v]->right = nodes[u];
             }
-        }
-        else if (strcmp(cmd, "PathSum") == 0) {
+        } else if (strcmp(cmd, "PathSum") == 0) {
             scanf("%d", &u);
             if (root && hasPathSum(root, u, 0)) {
                 printf("True\n");

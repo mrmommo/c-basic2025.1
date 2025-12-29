@@ -6,20 +6,23 @@
 int ***Alloc_Cub(int m, int r, int c) {
     int i, j;
     int ***a = (int ***)malloc(m * sizeof(int **));
-    if (!a) return NULL;
+    if (!a)
+        return NULL;
 
     for (i = 0; i < m; i++) {
         a[i] = (int **)malloc(r * sizeof(int *));
-        if (!a[i]) return NULL;
+        if (!a[i])
+            return NULL;
         for (j = 0; j < r; j++) {
             a[i][j] = (int *)calloc(c, sizeof(int));
-            if (!a[i][j]) return NULL;
+            if (!a[i][j])
+                return NULL;
         }
     }
     return a;
 }
 
-//Hàm Free_Cub(...)
+// Hàm Free_Cub(...)
 void Free_Cub(int ***a, int m, int r) {
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < r; j++)
@@ -34,7 +37,8 @@ void Free_Cub(int ***a, int m, int r) {
 void Realloc_Cub(int ****p, int m, int r, int c, int m2, int r2, int c2) {
     int ***old = *p;
     int ***new = Alloc_Cub(m2, r2, c2);
-    if (!new) return;
+    if (!new)
+        return;
     int mm = (m < m2 ? m : m2);
     int rr = (r < r2 ? r : r2);
     int cc = (c < c2 ? c : c2);
@@ -50,7 +54,8 @@ void Realloc_Cub(int ****p, int m, int r, int c, int m2, int r2, int c2) {
 int main() {
     int m = 2, r = 3, c = 4;
     int ***a = Alloc_Cub(m, r, c);
-    if (!a) return 1;
+    if (!a)
+        return 1;
 
     // Gán giá trị mẫu
     for (int i = 0; i < m; i++)

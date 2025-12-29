@@ -1,14 +1,12 @@
 #include <stdio.h>
-int main(){
-    int n ; 
+int main() {
+    int n;
     scanf("%d", &n);
-    int i, arr[n] ; 
+    int i, arr[n];
     int sum = 0;
-    for(i = 0 ; i < n ; i++){
-        scanf("%d",&arr[i]);
+    for (i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
         sum += arr[i];
-
-
     }
     printf("%d", sum);
     return 0;

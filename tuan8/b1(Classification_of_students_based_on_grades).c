@@ -8,19 +8,19 @@ typedef struct {
     int position;
 } Student;
 
-int compareGrade(const void* a, const void* b) {
-    return ((Student*)a)->grade - ((Student*)b)->grade;
+int compareGrade(const void *a, const void *b) {
+    return ((Student *)a)->grade - ((Student *)b)->grade;
 }
 
-int compareID(const void* a, const void* b) {
-    return strcmp(((Student*)a)->id, ((Student*)b)->id);
+int compareID(const void *a, const void *b) {
+    return strcmp(((Student *)a)->id, ((Student *)b)->id);
 }
 
 int main() {
     int n;
     scanf("%d", &n);
 
-    Student* students = (Student*)malloc(n * sizeof(Student));
+    Student *students = (Student *)malloc(n * sizeof(Student));
 
     for (int i = 0; i < n; i++) {
         scanf("%s %d", students[i].id, &students[i].grade);

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 int cmp(const void *a, const void *b) {
-    return (*(int*)a - *(int*)b);
+    return (*(int *)a - *(int *)b);
 }
 
 long long count_pairs(int *a, int n, long long x) {
@@ -11,7 +11,7 @@ long long count_pairs(int *a, int n, long long x) {
 
     while (l < r) {
         if ((long long)a[l] + a[r] <= x) {
-            ans += (r - l);  // tất cả cặp (l, l+1..r)
+            ans += (r - l); // tất cả cặp (l, l+1..r)
             l++;
         } else {
             r--;
@@ -25,8 +25,9 @@ int main() {
     int n;
     scanf("%d", &n);
 
-    int *a = (int*)malloc(n * sizeof(int));
-    for (int i = 0; i < n; i++) scanf("%d", &a[i]);
+    int *a = (int *)malloc(n * sizeof(int));
+    for (int i = 0; i < n; i++)
+        scanf("%d", &a[i]);
 
     qsort(a, n, sizeof(int), cmp);
 

@@ -18,7 +18,8 @@ int main() {
         while (cnt[v] > 0) {
             printf("%d", v);
             printed++;
-            if (printed < n) printf(" ");
+            if (printed < n)
+                printf(" ");
             cnt[v]--;
         }
     }

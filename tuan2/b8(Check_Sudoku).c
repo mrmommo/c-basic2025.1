@@ -4,7 +4,8 @@ int check_row(int mat[9][9], int row) {
     int seen[10] = {0};
     for (int j = 0; j < 9; ++j) {
         int val = mat[row][j];
-        if (val < 1 || val > 9 || seen[val]) return 0;
+        if (val < 1 || val > 9 || seen[val])
+            return 0;
         seen[val] = 1;
     }
     return 1;
@@ -14,7 +15,8 @@ int check_col(int mat[9][9], int col) {
     int seen[10] = {0};
     for (int i = 0; i < 9; ++i) {
         int val = mat[i][col];
-        if (val < 1 || val > 9 || seen[val]) return 0;
+        if (val < 1 || val > 9 || seen[val])
+            return 0;
         seen[val] = 1;
     }
     return 1;
@@ -25,7 +27,8 @@ int check_square(int mat[9][9], int start_row, int start_col) {
     for (int i = 0; i < 3; ++i)
         for (int j = 0; j < 3; ++j) {
             int val = mat[start_row + i][start_col + j];
-            if (val < 1 || val > 9 || seen[val]) return 0;
+            if (val < 1 || val > 9 || seen[val])
+                return 0;
             seen[val] = 1;
         }
     return 1;

@@ -8,15 +8,15 @@ typedef struct Node {
 } Node;
 
 /* tạo node mới */
-Node* newNode(int k) {
-    Node *p = (Node*)malloc(sizeof(Node));
+Node *newNode(int k) {
+    Node *p = (Node *)malloc(sizeof(Node));
     p->key = k;
     p->left = p->right = NULL;
     return p;
 }
 
 /* insert vào BST, bỏ qua nếu trùng */
-Node* insert(Node *root, int k) {
+Node *insert(Node *root, int k) {
     if (root == NULL)
         return newNode(k);
 
@@ -30,7 +30,8 @@ Node* insert(Node *root, int k) {
 
 /* preorder traversal */
 void preorder(Node *root) {
-    if (root == NULL) return;
+    if (root == NULL)
+        return;
     printf("%d ", root->key);
     preorder(root->left);
     preorder(root->right);
@@ -38,7 +39,8 @@ void preorder(Node *root) {
 
 /* postorder traversal */
 void postorder(Node *root) {
-    if (root == NULL) return;
+    if (root == NULL)
+        return;
     postorder(root->left);
     postorder(root->right);
     printf("%d ", root->key);
@@ -50,18 +52,18 @@ int main() {
     int k;
 
     while (1) {
-        if (scanf("%s", cmd) != 1) break;
-        if (cmd[0] == '#') break;
+        if (scanf("%s", cmd) != 1)
+            break;
+        if (cmd[0] == '#')
+            break;
 
         if (strcmp(cmd, "insert") == 0) {
             scanf("%d", &k);
             root = insert(root, k);
-        }
-        else if (strcmp(cmd, "preorder") == 0) {
+        } else if (strcmp(cmd, "preorder") == 0) {
             preorder(root);
             printf("\n");
-        }
-        else if (strcmp(cmd, "postorder") == 0) {
+        } else if (strcmp(cmd, "postorder") == 0) {
             postorder(root);
             printf("\n");
         }
