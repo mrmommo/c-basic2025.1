@@ -6,4 +6,6 @@ rac.c
 .clang-format
 #no vscode
 .vscode/
+#no input output
+tuan6/*.txt
 
