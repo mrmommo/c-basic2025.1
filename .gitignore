@@ -7,5 +7,7 @@ rac.c
 #no vscode
 .vscode/
 #no input output
-tuan6/*.txt
+tuan6/input.txt
+tuan6/output.txt
+
 
