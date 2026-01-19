@@ -24,3 +24,19 @@ int main() {
         printf("%c", ketqua[i]);
     return 0;
 }
+/*
+Dữ liệu
+· Dòng 1: xâu P1
+· Dòng 2: xâu P2
+· Dòng 3: văn bản T
+Kết quả:
+· Ghi văn bản T sau khi thay thế
+Ví dụ
+Dữ liệu
+AI
+Artificial Intelligence
+Recently, AI is a key technology. AI enable efficient operations in many fields.
+Kết quả
+Recently, Artificial Intelligence is a key technology. Artificial Intelligence
+enable efficient operations in many fields.
+*/

@@ -15,3 +15,16 @@ int main() {
     }
     return 0;
 }
+/*
+Input
+4 1000
+a
+ab
+abc
+abcd
+Output
+97
+930
+179
+924
+*/

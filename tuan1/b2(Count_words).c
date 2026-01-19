@@ -16,3 +16,12 @@ int main() {
     printf("%d", i);
     return 0;
 }
+/*
+Input
+Hanoi University Of Science and Technology
+School of Information and Communication Technology
+
+
+Output
+12
+*/

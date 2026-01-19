@@ -51,3 +51,14 @@ int main() {
     free(a);
     return 0;
 }
+/*
+input
+5
+1 4 3 1 4
+output
+0
+0
+0
+1
+1
+*/

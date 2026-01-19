@@ -21,3 +21,14 @@ int main() {
     printf("%d", dem);
     return 0;
 }
+/*
+Input
+4 4
+1 0 1 0
+1 1 1 0
+1 0 1 1
+1 1 1 1
+
+Ouput
+2
+*/

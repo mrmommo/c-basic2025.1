@@ -29,7 +29,9 @@ int main() {
     int num;
     scanf("%d", &num);
     int i, j, k;
+    int dem = 0;
     for (i = 0; i < num; i++) {
+        dem++;
         int NxN;
         scanf("%d", &NxN);
         for (j = 0; j < NxN; j++) {
@@ -43,3 +45,20 @@ int main() {
         printf("%d\n", kq[i]);
     return 0;
 }
+/*
+Input
+2
+4
+0 1 0 0
+0 0 0 1
+1 0 0 0
+0 0 1 0
+4
+0 1 0 0
+0 0 0 0
+1 0 0 1
+0 0 1 0
+Output
+1
+0
+*/

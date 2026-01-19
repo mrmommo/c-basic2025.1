@@ -74,3 +74,27 @@ int main() {
 
     return 0;
 }
+/*
+Example:
+MakeRoot 1
+AddLeft 2 1
+AddRight 3 1
+AddLeft 4 3
+AddRight 5 2
+AddLeft 6 5
+AddRight 7 5
+PathSum 4
+PathSum 5
+PathSum 8
+PathSum 14
+PathSum 15
+PathSum 20
+*
+Output:
+False
+False
+True
+True
+True
+False
+*/

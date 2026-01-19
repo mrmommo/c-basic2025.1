@@ -153,3 +153,24 @@ int main() {
     }
     return 0;
 }
+/*
+Example
+Input
+AddTerm 1 3 2
+AddTerm 1 4 0
+AddTerm 1 6 2
+AddTerm 2 3 2
+AddTerm 2 7 5
+PrintPoly 1
+PrintPoly 2
+AddPoly 2 1 3
+PrintPoly 3
+EvaluatePoly 2 1
+*
+
+Output
+9 2 4 0
+7 5 3 2
+7 5 12 2 4 0
+10
+*/

@@ -16,3 +16,10 @@ int main() {
     Binary(n);
     return 0;
 }
+/*
+Input
+20
+
+Output
+10100
+*/

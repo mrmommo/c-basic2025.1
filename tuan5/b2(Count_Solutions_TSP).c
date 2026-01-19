@@ -37,3 +37,13 @@ int main() {
     printf("%d", dem);
     return 0;
 }
+/*
+Input
+4  10
+0 1 2 6
+1 0 5 4
+2 5 0 3
+6 4 3 0
+Output
+2
+*/

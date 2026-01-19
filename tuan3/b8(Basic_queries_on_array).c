@@ -58,3 +58,22 @@ int main() {
 
     return 0;
 }
+/*
+Input
+5
+1 4 3 2 5
+*
+find-max
+find-min
+find-max-segment 1 3
+find-max-segment 2 5
+sum
+***
+
+Output
+5
+1
+4
+5
+15
+*/

@@ -80,3 +80,29 @@ int main() {
 
     return 0;
 }
+/*
+Dữ liệu
+MakeRoot 10
+Insert 11 10
+Insert 1 10
+Insert 3 10
+Insert 5 11
+Insert 4 11
+Height 10
+Depth 10
+Insert 8 3
+Insert 2 3
+Insert 7 3
+Insert 6 4
+Insert 9 4
+Height 10
+Depth 10
+Depth 3
+*
+Kết quả
+3
+1
+4
+1
+2
+*/

@@ -1,140 +1,129 @@
-#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-//
-#define max 100
 typedef struct Node {
     int key;
     struct Node *next;
-} node;
-node *head = NULL;
-//
-int Check(int k) {
-    node *p = head;
+} Node;
+
+Node *head = NULL;
+
+// Kiểm tra xem một giá trị đã tồn tại trong danh sách chưa
+int exists(int key) {
+    Node *p = head;
     while (p) {
-        if (p->key == k)
+        if (p->key == key)
             return 1;
         p = p->next;
     }
     return 0;
 }
-//
-void addlast(int k) {
-    if (Check(k) != 0)
+
+// Thêm vào đầu danh sách
+void addFirst(int key) {
+    if (exists(key))
         return;
-    else {
-        node *newnode = (node *)malloc(sizeof(node));
-        newnode->key = k;
-        newnode->next = NULL;
-        node *p = head;
-        if (head == NULL) {
-            head = newnode;
-            return;
-        } else {
-            while (p->next)
-                p = p->next;
-            p->next = newnode;
-        }
-    }
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->key = key;
+    newNode->next = head;
+    head = newNode;
 }
-//
-void addfirst(int k) {
-    if (Check(k) != 0)
+
+// Thêm vào cuối danh sách
+void addLast(int key) {
+    if (exists(key))
         return;
-    node *newnode = (node *)malloc(sizeof(node));
-    newnode->key = k;
-    newnode->next = NULL;
-    if (head == NULL) {
-        head = newnode;
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->key = key;
+    newNode->next = NULL;
+    if (!head) {
+        head = newNode;
         return;
     }
-    node *p = head;
-    head = newnode;
-    head->next = p;
-}
-//
-void addafter(int u, int v) {
-    if (Check(u) != 0)
-        return;
-    node *p = head;
-    while (p != NULL) {
-        if (p->key == v) {
-            node *newnode = (node *)malloc(sizeof(node));
-            newnode->key = u;
-            newnode->next = p->next;
-            p->next = newnode;
-            return;
-        }
+    Node *p = head;
+    while (p->next)
         p = p->next;
-    }
+    p->next = newNode;
 }
-//
-void addbefore(int u, int v) {
-    if (Check(u) != 0)
+
+// Thêm sau phần tử có key = afterKey
+void addAfter(int key, int afterKey) {
+    if (exists(key))
         return;
-    node *p = head;
-    node *before = head;
-    while (p != NULL) {
-        if (head->key == v) {
-            node *newnode = (node *)malloc(sizeof(node));
-            newnode->key = u;
-            newnode->next = head;
-            head = newnode;
-            return;
-        } else if (p->key == v) {
-            node *newnode = (node *)malloc(sizeof(node));
-            newnode->key = u;
-            newnode->next = p;
-            before->next = newnode;
-            return;
-        }
-        if (p != head)
-            before = before->next;
+    Node *p = head;
+    while (p && p->key != afterKey)
         p = p->next;
-    }
+    if (!p)
+        return;
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->key = key;
+    newNode->next = p->next;
+    p->next = newNode;
 }
-// remove k
-void removeKey(int k) {
-    // ko có node
+
+// Thêm trước phần tử có key = beforeKey
+void addBefore(int key, int beforeKey) {
+    if (exists(key))
+        return;
     if (!head)
         return;
-    if (head->key == k) {
-        node *tmp;
-        tmp = head;
+    if (head->key == beforeKey) {
+        addFirst(key);
+        return;
+    }
+    Node *prev = NULL;
+    Node *curr = head;
+    while (curr && curr->key != beforeKey) {
+        prev = curr;
+        curr = curr->next;
+    }
+    if (!curr)
+        return;
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode->key = key;
+    newNode->next = curr;
+    prev->next = newNode;
+}
+
+// Xóa phần tử có key = key
+void removeKey(int key) {
+    if (!head)
+        return;
+    if (head->key == key) {
+        Node *tmp = head;
         head = head->next;
         free(tmp);
         return;
     }
-    node *cur = head;
-    node *prev = NULL;
-    while (cur && cur->key != k) {
-        prev = cur;
-        cur = cur->next;
+    Node *prev = NULL;
+    Node *curr = head;
+    while (curr && curr->key != key) {
+        prev = curr;
+        curr = curr->next;
     }
-    if (!cur)
+    if (!curr)
         return;
-    prev->next = cur->next;
-    free(cur);
-    return;
+    prev->next = curr->next;
+    free(curr);
 }
-// reverse
+
+// Đảo ngược danh sách
 void reverse() {
-    node *prev = NULL;
-    node *cur = head;
-    while (cur) {
-        node *tmp = cur->next;
-        cur->next = prev;
-        prev = cur;
-        cur = tmp;
+    Node *prev = NULL;
+    Node *curr = head;
+    while (curr) {
+        Node *next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
     }
     head = prev;
-    return;
 }
-// printflist
-void printfList() {
-    node *p = head;
+
+// In danh sách
+void printList() {
+    Node *p = head;
     while (p) {
         printf("%d", p->key);
         if (p->next)
@@ -142,44 +131,57 @@ void printfList() {
         p = p->next;
     }
     printf("\n");
-    return;
 }
 
 int main() {
-    int n, k;
+    int n, x;
     scanf("%d", &n);
     for (int i = 0; i < n; i++) {
-        scanf("%d", &k);
-        addlast(k);
+        scanf("%d", &x);
+        addLast(x);
     }
-    char line[100];
-    while (fgets(line, max, stdin)) {
-        if (line[0] == '#')
-            break;
-        if (!strncmp(line, "addlast", 7)) {
-            int v;
-            sscanf(line + 8, "%d", &v);
-            addlast(v);
-        } else if (!strncmp(line, "addfirst", 8)) {
-            int v;
-            sscanf(line + 9, "%d", &v);
-            addfirst(v);
-        } else if (!strncmp(line, "addafter", 8)) {
+
+    char cmd[50];
+    while (scanf("%s", cmd) && strcmp(cmd, "#") != 0) {
+        if (strcmp(cmd, "addlast") == 0) {
+            int k;
+            scanf("%d", &k);
+            addLast(k);
+        } else if (strcmp(cmd, "addfirst") == 0) {
+            int k;
+            scanf("%d", &k);
+            addFirst(k);
+        } else if (strcmp(cmd, "addafter") == 0) {
             int u, v;
-            sscanf(line + 9, "%d %d", &u, &v);
-            addafter(u, v);
-        } else if (!strncmp(line, "addbefore", 9)) {
+            scanf("%d %d", &u, &v);
+            addAfter(u, v);
+        } else if (strcmp(cmd, "addbefore") == 0) {
             int u, v;
-            sscanf(line + 10, "%d %d", &u, &v);
-            addbefore(u, v);
-        } else if (!strncmp(line, "remove", 6)) {
-            int v;
-            sscanf(line + 7, "%d", &v);
-            removeKey(v);
-        } else if (!strncmp(line, "reverse", 7)) {
+            scanf("%d %d", &u, &v);
+            addBefore(u, v);
+        } else if (strcmp(cmd, "remove") == 0) {
+            int k;
+            scanf("%d", &k);
+            removeKey(k);
+        } else if (strcmp(cmd, "reverse") == 0) {
             reverse();
         }
     }
-    printfList();
+
+    printList();
     return 0;
 }
+/*
+Input
+5
+5 4 3 2 1
+addlast 3
+addlast 10
+addfirst 1
+addafter 10 4
+remove 1
+#
+
+Output
+5 4 3 2 10
+*/

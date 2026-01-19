@@ -40,14 +40,12 @@ void insert_key(char *k) {
 
 int main() {
     char line[100];
-    // Read initial keys
     while (fgets(line, sizeof(line), stdin)) {
-        line[strcspn(line, "\n")] = 0; // remove \n
+        line[strcspn(line, "\n")] = 0;
         if (strcmp(line, "*") == 0)
             break;
         insert_key(line);
     }
-    // Read actions
     while (fgets(line, sizeof(line), stdin)) {
         line[strcspn(line, "\n")] = 0;
         if (strcmp(line, "***") == 0)
@@ -68,3 +66,26 @@ int main() {
     }
     return 0;
 }
+/*
+Input
+computer
+university
+school
+technology
+phone
+*
+find school
+find book
+insert book
+find algorithm
+find book
+insert book
+***
+Output
+1
+0
+1
+0
+1
+0
+*/

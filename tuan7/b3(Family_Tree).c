@@ -70,3 +70,30 @@ int main() {
 
     return 0;
 }
+/*
+Output
+Each line is the result of a corresponding query.
+Example
+Input
+Peter Newman
+Michael Thomas
+John David
+Paul Mark
+Stephan Mark
+Pierre Thomas
+Mark Newman
+Bill David
+David Newman
+Thomas Mark
+***
+descendants Newman
+descendants Mark
+descendants David
+generation Mark
+***
+Output
+10
+5
+2
+2
+*/

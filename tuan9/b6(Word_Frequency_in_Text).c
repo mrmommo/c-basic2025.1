@@ -103,3 +103,13 @@ int main() {
     }
     return 0;
 }
+/*
+Input
+abc  def abc
+abc abcd def
+
+Output
+abc 3
+abcd 1
+def 2
+*/

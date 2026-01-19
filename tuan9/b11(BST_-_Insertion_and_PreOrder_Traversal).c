@@ -57,3 +57,18 @@ int main() {
     preorder(root);
     return 0;
 }
+/*
+Input
+insert 20
+insert 10
+insert 26
+insert 7
+insert 15
+insert 23
+insert 30
+insert 3
+insert 8
+#
+Output
+20 10 7 3 8 15 26 23 30
+*/

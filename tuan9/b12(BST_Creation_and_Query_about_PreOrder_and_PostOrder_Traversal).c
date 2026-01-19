@@ -71,3 +71,20 @@ int main() {
 
     return 0;
 }
+/*
+Input
+insert 5
+insert 9
+insert 2
+insert 1
+preorder
+insert 8
+insert 5
+insert 3
+postorder
+#
+
+Output
+5 2 1 9
+1 3 2 8 9 5
+*/

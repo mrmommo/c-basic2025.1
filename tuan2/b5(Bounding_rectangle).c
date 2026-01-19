@@ -34,3 +34,12 @@ int main() {
     printf("%d", sum);
     return 0;
 }
+/*
+Dữ liệu
+3
+2 4 2 7
+3 2 4 7
+1 2 5 2
+Kết quả
+20
+*/

@@ -25,3 +25,10 @@ int main() {
     }
     return 0;
 }
+/*
+Input
+4
+1 3 4 2
+Output
+1 2 3 4
+*/

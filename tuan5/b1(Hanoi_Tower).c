@@ -22,3 +22,13 @@ int main() {
     Hanoi(n, A, B, C, 1);
     return 0;
 }
+/*
+Input
+2 10 20 30
+
+Output
+3
+10 30
+10 20
+30 20
+*/

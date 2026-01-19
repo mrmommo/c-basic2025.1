@@ -18,3 +18,10 @@ int main() {
     printf("%d", dem);
     return 0;
 }
+/*
+Input
+6  3
+2 4 5 1 1 2
+Output
+2
+*/

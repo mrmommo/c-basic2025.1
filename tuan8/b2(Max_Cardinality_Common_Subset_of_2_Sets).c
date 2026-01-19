@@ -37,3 +37,15 @@ int main() {
     free(B);
     return 0;
 }
+/*
+Example
+Input
+6 6
+7 3 10 1 2 8
+6 2 8 10 5 7
+
+Output
+4
+
+Explanation. The max-cardinality common subset of A and B is {2, 8, 10, 7}
+*/

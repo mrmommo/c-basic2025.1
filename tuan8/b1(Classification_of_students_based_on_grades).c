@@ -25,14 +25,10 @@ int main() {
     for (int i = 0; i < n; i++) {
         scanf("%s %d", students[i].id, &students[i].grade);
     }
-
-    // Sắp xếp theo điểm để gán vị trí
     qsort(students, n, sizeof(Student), compareGrade);
     for (int i = 0; i < n; i++) {
         students[i].position = i;
     }
-
-    // Sắp xếp lại theo ID để in ra đúng thứ tự
     qsort(students, n, sizeof(Student), compareID);
     for (int i = 0; i < n; i++) {
         printf("%s %d\n", students[i].id, students[i].position);
@@ -41,3 +37,19 @@ int main() {
     free(students);
     return 0;
 }
+/*
+Input
+5
+S000003 3
+S000002 6
+S000005 5
+S000004 10
+S000001 8
+
+Output
+S000001 3
+S000002 2
+S000003 0
+S000004 4
+S000005 1
+*/

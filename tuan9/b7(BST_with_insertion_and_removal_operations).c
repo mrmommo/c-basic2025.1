@@ -4,128 +4,131 @@
 
 typedef struct Node {
     int key;
-    struct Node *left;
-    struct Node *right;
+    struct Node *left, *right;
 } Node;
 
-Node *root = NULL;
-int keys[10000];
-int key_count;
-
-Node *create_node(int key) {
-    Node *node = (Node *)malloc(sizeof(Node));
-    node->key = key;
-    node->left = node->right = NULL;
-    return node;
+/* tạo node mới */
+Node *newNode(int k) {
+    Node *p = (Node *)malloc(sizeof(Node));
+    p->key = k;
+    p->left = p->right = NULL;
+    return p;
 }
 
-void insert_iter(Node **root, int key) {
-    Node *newnode = create_node(key);
-    if (*root == NULL) {
-        *root = newnode;
-        return;
-    }
-    Node *curr = *root;
-    Node *parent = NULL;
-    while (curr) {
-        parent = curr;
-        if (key < curr->key) {
-            curr = curr->left;
-        } else if (key > curr->key) {
-            curr = curr->right;
+/* insert vào BST, bỏ qua nếu trùng */
+Node *insert(Node *root, int k) {
+    if (root == NULL)
+        return newNode(k);
+
+    if (k < root->key)
+        root->left = insert(root->left, k);
+    else if (k > root->key)
+        root->right = insert(root->right, k);
+
+    return root;
+}
+
+/* tìm node nhỏ nhất */
+Node *minNode(Node *root) {
+    while (root && root->left)
+        root = root->left;
+    return root;
+}
+
+/* remove node có key = k */
+Node *removeNode(Node *root, int k) {
+    if (root == NULL)
+        return NULL;
+
+    if (k < root->key) {
+        root->left = removeNode(root->left, k);
+    } else if (k > root->key) {
+        root->right = removeNode(root->right, k);
+    } else {
+        // tìm thấy node cần xóa
+        if (root->left == NULL) {
+            Node *tmp = root->right;
+            free(root);
+            return tmp;
+        } else if (root->right == NULL) {
+            Node *tmp = root->left;
+            free(root);
+            return tmp;
         } else {
-            free(newnode);
-            return;
+            // có 2 con
+            Node *tmp = minNode(root->right);
+            root->key = tmp->key;
+            root->right = removeNode(root->right, tmp->key);
         }
     }
-    if (key < parent->key) {
-        parent->left = newnode;
-    } else {
-        parent->right = newnode;
-    }
+    return root;
 }
 
-Node *find_min(Node *node) {
-    while (node->left)
-        node = node->left;
-    return node;
-}
-
-void remove_node(Node **root, int key) {
-    if (*root == NULL)
+/* preorder */
+void preorder(Node *root) {
+    if (!root)
         return;
-    if (key < (*root)->key) {
-        remove_node(&(*root)->left, key);
-    } else if (key > (*root)->key) {
-        remove_node(&(*root)->right, key);
-    } else {
-        if ((*root)->left == NULL) {
-            Node *temp = *root;
-            *root = (*root)->right;
-            free(temp);
-        } else if ((*root)->right == NULL) {
-            Node *temp = *root;
-            *root = (*root)->left;
-            free(temp);
-        } else {
-            Node *temp = find_min((*root)->right);
-            (*root)->key = temp->key;
-            remove_node(&(*root)->right, temp->key);
-        }
-    }
+    printf("%d ", root->key);
+    preorder(root->left);
+    preorder(root->right);
 }
 
-void collect_preorder(Node *root) {
-    if (root) {
-        keys[key_count++] = root->key;
-        collect_preorder(root->left);
-        collect_preorder(root->right);
-    }
-}
-
-void collect_postorder(Node *root) {
-    if (root) {
-        collect_postorder(root->left);
-        collect_postorder(root->right);
-        keys[key_count++] = root->key;
-    }
+/* postorder */
+void postorder(Node *root) {
+    if (!root)
+        return;
+    postorder(root->left);
+    postorder(root->right);
+    printf("%d ", root->key);
 }
 
 int main() {
-    char line[100];
-    while (fgets(line, sizeof(line), stdin)) {
-        line[strcspn(line, "\n")] = 0;
-        if (strcmp(line, "#") == 0)
+    Node *root = NULL;
+    char cmd[30];
+    int k;
+
+    while (1) {
+        if (scanf("%s", cmd) != 1)
             break;
-        char cmd[20];
-        int k;
-        if (sscanf(line, "%s %d", cmd, &k) == 2) {
-            if (strcmp(cmd, "insert") == 0) {
-                insert_iter(&root, k);
-            } else if (strcmp(cmd, "remove") == 0) {
-                remove_node(&root, k);
-            }
-        } else {
-            if (strcmp(line, "preorder") == 0) {
-                key_count = 0;
-                collect_preorder(root);
-                for (int i = 0; i < key_count; i++) {
-                    printf("%d", keys[i]);
-                    if (i < key_count - 1)
-                        printf(" ");
-                }
-                printf("\n");
-            } else if (strcmp(line, "postorder") == 0) {
-                key_count = 0;
-                collect_postorder(root);
-                for (int i = 0; i < key_count; i++) {
-                    printf("%d", keys[i]);
-                    if (i < key_count - 1)
-                        printf(" ");
-                }
-                printf("\n");
-            }
+        if (cmd[0] == '#')
+            break;
+
+        if (strcmp(cmd, "insert") == 0) {
+            scanf("%d", &k);
+            root = insert(root, k);
+        } else if (strcmp(cmd, "remove") == 0) {
+            scanf("%d", &k);
+            root = removeNode(root, k);
+        } else if (strcmp(cmd, "preorder") == 0) {
+            preorder(root);
+            printf("\n");
+        } else if (strcmp(cmd, "postorder") == 0) {
+            postorder(root);
+            printf("\n");
         }
     }
+
     return 0;
 }
+/*
+Input
+insert 3
+insert 4
+remove 4
+preorder
+postorder
+insert 5
+insert 1
+insert 8
+remove 1
+preorder
+postorder
+#
+
+Output
+3
+3
+3 5 8
+8 5 3k
+
+*/

@@ -67,3 +67,19 @@ int main() {
     free(a);
     return 0;
 }
+/*
+Input
+11
+10 5 2 3 8 7 9 20 15 18 40
+Output
+3 2 7 9 8 5 18 15 40 20 10
+
+
+Example
+Input
+11
+10 5 2 3 8 7 9 20 15 18 4
+Output
+NULL
+
+*/

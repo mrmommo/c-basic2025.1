@@ -16,3 +16,9 @@ int main() {
     printf("%lld", Ckn(k, n));
     return 0;
 }
+/*
+Input
+3  5
+Output
+10
+*/

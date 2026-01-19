@@ -43,3 +43,14 @@ int main() {
     free(a);
     return 0;
 }
+/*
+Input:
+5
+5 10 2 7 9
+2
+15
+13
+Output:
+7
+5
+*/

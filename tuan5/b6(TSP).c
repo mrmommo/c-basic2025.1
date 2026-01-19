@@ -41,3 +41,13 @@ int main() {
     printf("%d", mindis);
     return 0;
 }
+/*
+Input
+4
+0 1 1 9
+1 0 9 3
+1 9 0 2
+9 3 2 0
+Output
+7
+*/

@@ -130,3 +130,22 @@ int main() {
         printf("%d %d\n", roots[i], mult[i]);
     return 0;
 }
+/*
+Input
+-1  -1  -2
+Output
+NO SOLUTION
+
+Input
+-6 11 -6
+Output
+1 1
+2 1
+3 1
+
+Input
+8  5  -50
+Output
+-5  2
+2   1
+*/

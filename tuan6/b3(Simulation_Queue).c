@@ -8,38 +8,66 @@
 #include <stdlib.h>
 #include <string.h>
 
-//
-#define max 100
-int queue[max] = {0};
-int top = 0;
+#define MAX 1000
+
+int queue[MAX];
+int front = 0, rear = 0;
 
 void push(int v) {
-    if (top < max) {
-        queue[top++] = v;
+    if (rear < MAX) {
+        queue[rear++] = v;
     }
 }
+
 void pop() {
-    if (top > 0) {
-        printf("%d\n", queue[0]);
-        for (int i = 0; i < top; i++) {
-            queue[i] = queue[i + 1];
-        }
-        top--;
-    } else
+    if (front < rear) {
+        printf("%d\n", queue[front++]);
+    } else {
         printf("NULL\n");
+    }
 }
+
 int main() {
     char line[100];
     while (fgets(line, sizeof(line), stdin)) {
         if (line[0] == '#')
             break;
-        if (!strncmp(line, "PUSH", 4)) {
+
+        if (strncmp(line, "PUSH", 4) == 0) {
             int v;
             sscanf(line + 5, "%d", &v);
             push(v);
-        } else if (!strncmp(line, "POP", 3)) {
+        } else if (strncmp(line, "POP", 3) == 0) {
             pop();
         }
     }
     return 0;
 }
+/*
+Input
+PUSH 1
+PUSH 2
+PUSH 3
+POP
+POP
+PUSH 4
+PUSH 5
+POP
+#
+Output
+1
+2
+3
+
+Input
+PUSH 1
+POP
+POP
+PUSH 4
+POP
+#
+Output
+1
+NULL
+4
+*/

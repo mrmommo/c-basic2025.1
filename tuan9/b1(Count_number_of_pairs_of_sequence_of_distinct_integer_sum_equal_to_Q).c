@@ -29,3 +29,10 @@ int main() {
     free(a);
     return 0;
 }
+/*
+Input
+5 8
+4 6 5 3 2
+Output
+2
+*/

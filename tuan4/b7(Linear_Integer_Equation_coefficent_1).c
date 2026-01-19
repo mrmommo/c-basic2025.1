@@ -14,9 +14,6 @@ void Try(int k) {
         if (k == n - 1) {
             if (sum == m)
                 solution();
-        } else if (sum >= m) {
-            sum -= i;
-            continue;
         } else
             Try(k + 1);
         sum -= i;
@@ -27,3 +24,14 @@ int main() {
     Try(0);
     return 0;
 }
+/*
+Input
+3  5
+Output
+1 1 3
+1 2 2
+1 3 1
+2 1 2
+2 2 1
+3 1 1
+*/

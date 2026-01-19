@@ -27,6 +27,7 @@ int main() {
         len--;
     int k;
     scanf("%d", &k);
+
     for (int j = 0; j < len; j++) {
         while (k > 0 && top > 0 && stack[top - 1] > line[j]) {
             pop();
@@ -43,3 +44,10 @@ int main() {
     }
     return 0;
 }
+/*
+Input:
+869357495356872
+9
+Output:
+335672
+*/

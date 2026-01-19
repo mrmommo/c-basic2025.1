@@ -26,3 +26,21 @@ int main() {
                (-b + sqrt(delta)) / (2 * a));
     return 0;
 }
+/*
+Input
+1 1 8
+Output
+NO SOLUTION
+
+
+Input
+1 -2 1
+Output
+1.00
+
+Input
+1 -7 10
+Output
+2.00 5.00
+
+*/

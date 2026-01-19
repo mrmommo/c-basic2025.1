@@ -19,3 +19,7 @@ int main(void) {
     printf("%s\n", arr);
     return 0;
 }
+/*
+- input: “papa”, ‘p’, ‘m’
+- output: “mama”
+*/

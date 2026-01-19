@@ -22,3 +22,13 @@ int main() {
     Try(0);
     return 0;
 }
+/*
+Input
+3
+Output
+000
+001
+010
+100
+101
+*/

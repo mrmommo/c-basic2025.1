@@ -30,3 +30,20 @@ int main() {
         printf("%d\n", arr3[i]);
     return 0;
 }
+/*
+Input
+3
+3 3
+1 2 3
+1 2 3
+4 2
+1 2 3 4
+1 2
+3 3
+2 4 1
+2 3 1
+Output
+1
+0
+0
+*/

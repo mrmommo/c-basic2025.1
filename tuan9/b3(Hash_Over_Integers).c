@@ -36,14 +36,12 @@ void insert_key(long long key) {
 
 int main() {
     char line[100];
-    // Read initial keys
     while (fgets(line, sizeof(line), stdin)) {
         if (line[0] == '*' && line[1] == '\n')
             break;
         long long k = atoll(line);
         insert_key(k);
     }
-    // Read actions
     while (fgets(line, sizeof(line), stdin)) {
         if (strncmp(line, "***", 3) == 0)
             break;
@@ -63,3 +61,22 @@ int main() {
     }
     return 0;
 }
+/*
+Input
+4
+5
+2
+*
+find 3
+insert 4
+find 2
+insert 3
+find 3
+***
+Output
+0
+0
+1
+1
+1
+*/

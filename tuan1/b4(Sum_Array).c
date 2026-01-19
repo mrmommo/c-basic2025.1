@@ -11,3 +11,10 @@ int main() {
     printf("%d", sum);
     return 0;
 }
+/*
+Input
+4
+1 2 3 4
+Output
+10
+*/

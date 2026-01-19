@@ -14,3 +14,12 @@ int main() {
     printf("%d", dem);
     return 0;
 }
+/*
+Input
+5
+3 2 4 7 9
+
+Output
+2
+
+*/

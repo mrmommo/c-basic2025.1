@@ -11,3 +11,10 @@ int main() {
     printf("%d", GCD(a, b));
     return 0;
 }
+/*
+Input
+16 24
+
+Output
+8
+*/
